@@ -1,0 +1,5 @@
+<?php
+/*
+Get sitewide stats.
+*/
+?>

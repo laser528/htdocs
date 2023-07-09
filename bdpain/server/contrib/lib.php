@@ -1,0 +1,3 @@
+<?php
+/* Generic PHP Functions. */
+?>

@@ -1,0 +1,5 @@
+<?php
+/*
+Removes an Opportunity.
+*/
+?>
