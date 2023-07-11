@@ -19,7 +19,7 @@ function fetch($endpoint, $method ="GET", $payload = null) {
         CURLOPT_SSL_VERIFYPEER => 0,
     );
 
-    if (payload) $opt[CURLOPT_POSTFIELDS] = json_encode($payload);
+    if ($payload) $opt[CURLOPT_POSTFIELDS] = json_encode($payload);
 
     echo print_r($opt);
 
