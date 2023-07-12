@@ -1,35 +1,35 @@
 @font-face {
   font-family: "SourceSansPro-Light";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-Light.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-Light.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "SourceSansPro-Italic";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-Italic.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-Italic.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "SourceSansPro-Regular";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-Regular.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-Regular.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "SourceSansPro-LightItalic";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-LightItalic.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-LightItalic.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "SourceSansPro-Semibold";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-Semibold.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-Semibold.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "SourceSansPro-SemiboldItalic";
-  src: url("../static/fonts/Source\ Sans\ Pro/SourceSansPro-SemiboldItalic.ttf")
+  src: url("/src/static/fonts/Source\ Sans\ Pro/SourceSansPro-SemiboldItalic.ttf")
     format("truetype");
 }
