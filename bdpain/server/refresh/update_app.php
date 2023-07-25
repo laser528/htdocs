@@ -5,6 +5,8 @@ require_once "../contrib/api_request.php";
 require_once "../users/lib.php";
 require_once "../connections/lib.php";
 
+set_headers();
+
 $conn = get_mysql_connection();
 $stmt = $conn->prepare("SELECT MAX(last_api_updated) as updatedAt FROM `users`");
 $stmt->execute();
@@ -20,8 +22,6 @@ while (true) {
     $response = json_decode($result);
 
     if (isset($response->error)) exit();
-    echo count($response->users);
-    echo "<br/>";
     $users = array_merge($users, $response->users);
 
     if (!count($response->users) || count($response->users) % 100 != 0) break;
@@ -49,4 +49,6 @@ foreach($users as $user) {
         $stmt_2->close();
     }
 }
+$date = date('Y-m-d H:i:s');
+echo json_encode(array("success" => "App updated at {$date}"))
 ?>
