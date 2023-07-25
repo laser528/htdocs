@@ -1,7 +1,7 @@
 <?php
-/* Updates an active session. Acts as a refresh. */
 require_once "../contrib/lib.php";
 require_once "../contrib/api_request.php";
+require_once "lib.php";
 
 set_headers();
 
@@ -13,6 +13,5 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
-$result = fetch("sessions/{$data->payload->session_id}", "PATCH");
-echo $result;
+echo update_user($data->payload);
 ?>

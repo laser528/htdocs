@@ -1,7 +1,7 @@
 <?php
 /* Make calls to BDPA API. */
-require_once "./constants.php";
-require_once "./rate_limit.php";
+require_once "constants.php";
+require_once "rate_limit.php";
 
 function fetch($endpoint, $method ="GET", $payload = null) {
     $opt = array(
@@ -20,8 +20,6 @@ function fetch($endpoint, $method ="GET", $payload = null) {
     );
 
     if ($payload) $opt[CURLOPT_POSTFIELDS] = json_encode($payload);
-
-    echo print_r($opt);
 
     $ch = curl_init();
     curl_setopt_array($ch, $opt);

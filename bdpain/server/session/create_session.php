@@ -1,5 +1,6 @@
 <?php
-/* Updates an active session. Acts as a refresh. */
+/* Makes a new active sessions for a profile or opportunity. */
+
 require_once "../contrib/lib.php";
 require_once "../contrib/api_request.php";
 
@@ -13,6 +14,6 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
-$result = fetch("sessions/{$data->payload->session_id}", "PATCH");
+$result = fetch("sessions", "POST", $data->payload);
 echo $result;
 ?>
