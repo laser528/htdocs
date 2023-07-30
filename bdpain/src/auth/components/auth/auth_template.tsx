@@ -8,6 +8,7 @@ import Alert from "react-bootstrap/Alert";
 import "./auth.scss";
 import { AuthController, AuthProps, AuthState } from "./auth_interface";
 import { LoginForm } from "../login_form/login_form";
+import { UserForm } from "../user_form/user_form";
 
 export function template(
   this: AuthController,
@@ -25,7 +26,7 @@ export function template(
         )}
         <Card className="shadow rounded-3 my-5">
           <Card.Body className="p-4 p-sm-5">
-            <LoginForm onError={this.onError}></LoginForm>
+            <UserForm onError={this.onError}></UserForm>
           </Card.Body>
         </Card>
       </Col>

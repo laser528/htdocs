@@ -70,8 +70,8 @@ function create_user($payload) {
 
     $user = $response->user;
 
-    $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $stmt = $connection->prepare("INSERT INTO `user` (user_id, last_api_updated, url) VALUES(?,?,?)");
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("INSERT INTO `user` (user_id, last_api_updated, url) VALUES(?,?,?)");
 
     $stmt->bind_param("sss", $user->user_id, $user->updatedAt, $user->user_id);
     if(!$stmt->execute()) return json_encode(array("error" => $stmt->error));

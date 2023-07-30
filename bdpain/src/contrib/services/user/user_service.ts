@@ -7,6 +7,7 @@ interface UserRequest {
   username: string;
   password: string;
   email: string;
+  type: UserType;
 
   // If set lets assume its an update request, since new users dont have this.
   userId?: string;
