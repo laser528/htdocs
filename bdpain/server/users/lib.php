@@ -47,4 +47,36 @@ function update_user($payload) {
     $result = fetch("users/{$payload->user_id}", "PATCH", $payload);
     return $result;
 }
+
+function create_user($payload) {
+    if(!isset($payload) || !isset($payload->username)) throw new Exception("Username must be defined");
+
+    $api_salt = openssl_random_pseudo_bytes(16);
+    $key = hash_pbkdf2("sha256", $payload->password, $api_salt, 100000, 64);
+
+    $api_salt = bin2hex($api_salt);
+    $key = bin2hex($key);
+
+    $api_result = fetch("users", "POST", array(
+        "username" => $payload->username,
+        "email" => $payload->email,
+        "salt" => $api_salt,
+        "key" => $key,
+        "type" => $payload->type,
+    ));
+
+    $response = json_decode($api_result);
+    if (isset($response->error)) return $api_result;
+
+    $user = $response->user;
+
+    $connection = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $stmt = $connection->prepare("INSERT INTO `user` (user_id, last_api_updated, url) VALUES(?,?,?)");
+
+    $stmt->bind_param("sss", $user->user_id, $user->updatedAt, $user->user_id);
+    if(!$stmt->execute()) return json_encode(array("error" => $stmt->error));
+    else return $api_result;
+
+    $stmt->close();
+}
 ?>

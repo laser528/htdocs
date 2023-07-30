@@ -1,5 +1,14 @@
-export interface LoginFormProps {}
+import { FormEvent } from "react";
 
-export interface LoginFormState {}
+export interface LoginFormProps {
+  onError?: (error: string) => void;
+}
 
-export interface LoginFormController {}
+export interface LoginFormState {
+  showSpinner: boolean;
+  loginAttempts: number;
+}
+
+export interface LoginFormController {
+  handleSubmit: (event: FormEvent) => void;
+}

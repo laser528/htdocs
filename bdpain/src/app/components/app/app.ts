@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { template } from "./app_template";
 import { AppProps, AppController, AppState, AppTheme } from "./app_interface";
+import { NetworkService } from "../../../contrib/services/network/network_service";
 
 export class App
   extends Component<AppProps, AppState>
@@ -16,7 +17,7 @@ export class App
   }
 
   readonly onThemeChange = (theme: AppTheme) => {
-    if (theme == this.state.theme) return;
+    if (theme === this.state.theme) return;
 
     localStorage.setItem("theme", theme);
     this.setState({ theme });

@@ -1,4 +1,5 @@
 import React from "react";
+import Spinner from "react-bootstrap/Spinner";
 
 import "./spinner.scss";
 import {
@@ -12,5 +13,9 @@ export function template(
   props: SpinnerProps,
   state: SpinnerState
 ) {
-  return <div>Hi</div>;
+  return (
+    <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner>
+  );
 }

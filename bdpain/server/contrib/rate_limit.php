@@ -9,7 +9,7 @@ class RateLimiter {
     private $instances;
 
     public static function getInstance() {
-        if(!self::$instance) self::$instance = new RateLimiter(10, 1);
+        if(!self::$instance) self::$instance = new RateLimiter(9, 1);
 
         return self::$instance;
     }
