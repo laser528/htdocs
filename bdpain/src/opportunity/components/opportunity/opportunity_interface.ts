@@ -1,5 +1,11 @@
 export interface OpportunityProps {}
 
-export interface OpportunityState {}
+export interface OpportunityState {
+  errorMessage?: string;
+}
 
-export interface OpportunityController {}
+export interface OpportunityController {
+  handleAlertClose: () => void;
+  onError: (error: string) => void;
+  id: string;
+}

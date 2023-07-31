@@ -1,5 +1,19 @@
 @import "fonts.css";
 
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+html {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(to right, #0062e6, #33aeff);
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -15,4 +29,8 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+#root {
+  height: 100%;
 }

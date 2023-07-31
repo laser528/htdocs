@@ -1,4 +1,6 @@
-export interface OpportunityViewProps {}
+export interface OpportunityViewProps {
+  id: string;
+}
 
 export interface OpportunityViewState {}
 

@@ -13,15 +13,15 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
-if (isset($data->opportunity_id)) {
-    $result = fetch("opportunities/{$data->opportunity_id}", "GET");
+if (isset($data->payload->opportunity_id)) {
+    $result = fetch("opportunities/{$data->payload->opportunity_id}", "GET");
     echo $result;
     exit();
 }
 
 $endpoint = "opportunities";
 
-if (isset($data->after)) $endpoint.="?after={$data->after}";
+if (isset($data->payload->after)) $endpoint.="?after={$data->payload->after}";
 
 $result = fetch($endpoint, "GET");
 echo $result;

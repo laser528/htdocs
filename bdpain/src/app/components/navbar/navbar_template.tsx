@@ -13,19 +13,7 @@ import { Briefcase, Search, PersonBadge } from "react-bootstrap-icons";
 import "./navbar.scss";
 import { NavbarController, NavbarProps, NavbarState } from "./navbar_interface";
 import { LinkContainer } from "react-router-bootstrap";
-import { UserType, User } from "../../../contrib/services/user/lib";
-
-export function GuestLinks() {
-  <LinkContainer to="/">
-    <Nav.Link className="me-3">Home</Nav.Link>
-  </LinkContainer>;
-}
-
-export function AdminLinks() {}
-
-export function InnerLinks() {}
-
-export function StaffLinks() {}
+import { UserType } from "../../../contrib/services/user/lib";
 
 export function template(
   this: NavbarController,
@@ -46,7 +34,10 @@ export function template(
         <Navbar.Collapse id="navbarScroll">
           <Form
             className="d-flex w-100 me-2"
-            onSubmit={() => console.log("hit")}
+            onSubmit={(event) => {
+              event.preventDefault();
+              console.log("hit");
+            }}
           >
             <InputGroup>
               <InputGroup.Text style={{ borderRight: 0 }}>
@@ -61,7 +52,7 @@ export function template(
           </Form>
           {this.userType !== UserType.GUEST ? (
             <>
-              <LinkContainer to="/opportunites">
+              <LinkContainer to="/opportunities">
                 <Nav.Link>
                   <div className="navLockup me-3">
                     <Briefcase className="icon mx-auto" />

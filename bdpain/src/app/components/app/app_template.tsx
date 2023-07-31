@@ -12,6 +12,7 @@ import { AuthType } from "../../../auth/components/auth/auth_interface";
 import ProtectedRoute from "../protected_route/protected_route";
 import { UserType } from "../../../contrib/services/user/lib";
 import { Admin } from "../../../admin/components/admin/admin";
+import Opportunity from "../../../opportunity/components/opportunity/opportunity";
 
 export function template(
   this: AppController,
@@ -25,7 +26,7 @@ export function template(
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route
-            path="/auth/login/"
+            path="/auth/login"
             element={
               <ProtectedRoute
                 isAllowed={!this.isLoggedIn}
@@ -36,7 +37,7 @@ export function template(
             }
           />
           <Route
-            path="/auth/register/"
+            path="/auth/register"
             element={
               <ProtectedRoute
                 isAllowed={!this.isLoggedIn}
@@ -79,9 +80,32 @@ export function template(
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/opportunities"
+            element={
+              <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+                <Opportunity />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/opportunities/:id"
+            element={
+              <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+                <Opportunity />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
+      <footer className="footer bg-body-tertiary">
+        <Container>
+          <span className="text-muted">
+            @copy; 2023 InBDPA. All rights reserved.
+          </span>
+        </Container>
+      </footer>
     </main>
   );
 }
