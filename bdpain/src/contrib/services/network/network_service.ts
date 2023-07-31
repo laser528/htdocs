@@ -1,11 +1,5 @@
 import { Observable, map, of, switchMap } from "rxjs";
-import { UserService } from "../user/user_service";
 import { AppUser } from "../user/app_user";
-
-interface NetworkRequest {
-  path: string;
-  payload: object;
-}
 
 export class NetworkService {
   private static instance: NetworkService;

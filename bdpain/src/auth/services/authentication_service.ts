@@ -1,6 +1,10 @@
 import { NetworkService } from "../../contrib/services/network/network_service";
 import { AppUser } from "../../contrib/services/user/app_user";
-import { Observable, Subject, of, share, switchMap, tap } from "rxjs";
+import { Observable, Subject, of, share, switchMap } from "rxjs";
+import {
+  LocalStorage,
+  SessionStorage,
+} from "../../contrib/services/storage/storage";
 
 interface AuthRequest {
   username: string;
@@ -18,8 +22,8 @@ export class AuthenticationService {
 
   private constructor() {
     const userStorage =
-      localStorage.getItem("user") ?? sessionStorage.getItem("user");
-    if (userStorage) this.appUser.setUser(JSON.parse(userStorage));
+      LocalStorage.getItem("user") ?? SessionStorage.getItem("user");
+    if (userStorage) this.appUser.setUser(userStorage);
 
     this.response$ = this.request$.pipe(
       switchMap((request) =>
@@ -29,24 +33,25 @@ export class AuthenticationService {
               this.failedAttempts++;
               if (this.failedAttempts === 3) {
                 this.failedAttempts = 0;
-                localStorage.setItem("loginTimer", Date.now().toString());
+                LocalStorage.setItem("loginTimer", Date.now().toString());
               }
+              return of(response);
             }
 
             const user = {
-              userId: response.user_id,
-              username: response.username,
-              email: response.email,
-              type: response.type,
-              url: response.url,
+              userId: response.user.user_id,
+              username: response.user.username,
+              email: response.user.email,
+              type: response.user.type,
+              url: response.user.url,
             };
 
             this.appUser.setUser(user);
 
             if (request.rememberMe) {
-              localStorage.setItem("user", JSON.stringify(user));
+              LocalStorage.setItem("user", JSON.stringify(user));
             } else {
-              sessionStorage.setItem("user", JSON.stringify(user));
+              SessionStorage.setItem("user", JSON.stringify(user));
             }
             return of(response);
           })
@@ -81,15 +86,15 @@ export class AuthenticationService {
   }
 
   logout() {
-    localStorage.removeItem("user");
+    LocalStorage.removeItem("user");
     sessionStorage.removeItem("user");
-    localStorage.removeItem("loginTimer");
+    LocalStorage.removeItem("loginTimer");
     this.failedAttempts = 0;
     this.appUser.removeUser();
   }
 
   private get timer() {
-    return parseInt(localStorage.getItem("loginTimer") ?? "0");
+    return parseInt(LocalStorage.getItem("loginTimer") ?? "0");
   }
 
   canLogin() {
@@ -98,7 +103,7 @@ export class AuthenticationService {
     } else {
       const waitTimeInMinutes = (this.timer + 3600000 - Date.now()) / 1000 / 60;
       if (waitTimeInMinutes <= 0) {
-        localStorage.removeItem("loginTimer");
+        LocalStorage.removeItem("loginTimer");
         return { canLogin: true, failedAttempts: 0 };
       }
       return {

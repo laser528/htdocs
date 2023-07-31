@@ -68,7 +68,7 @@ export function template(
           </Button>
         </div>
       </Form>
-      <Card.Link href="" className="d-block text-center">
+      <Card.Link href="/auth/forgot" className="d-block text-center">
         Forgot Password?{" "}
       </Card.Link>
     </>

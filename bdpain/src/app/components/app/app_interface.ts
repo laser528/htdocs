@@ -1,3 +1,5 @@
+import { UserType } from "../../../contrib/services/user/lib";
+
 export enum AppTheme {
   LIGHT = "light",
   DARK = "dark",
@@ -11,4 +13,7 @@ export interface AppState {
 
 export interface AppController {
   onThemeChange: (theme: AppTheme) => void;
+  isLoggedIn: boolean;
+  url: string;
+  userType: UserType;
 }

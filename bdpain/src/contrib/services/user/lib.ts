@@ -2,7 +2,7 @@ export enum UserType {
   GUEST = "guest",
   INNER = "inner",
   STAFF = "staff",
-  ADMIN = "admin",
+  ADMIN = "administrator",
 }
 
 export interface User {

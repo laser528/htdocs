@@ -1,6 +1,7 @@
 <?php
 require_once "../contrib/lib.php";
 require_once "../contrib/api_request.php";
+require_once "../users/lib.php";
 /** Login a user. */
 set_headers();
 
@@ -15,7 +16,9 @@ $result = fetch("users/{$username}", "GET");
 $response = json_decode($result);
 
 if(isset($response->error)) {
-    // TODO: Check response error. If user not found, remove user from local DB.
+    if (strpos($response->error, $username) != false) {
+        remove_user_locally(null, $username);
+    }
     echo $result;
     exit();
 }
@@ -42,6 +45,6 @@ echo json_encode(array("success" => true, "user" => array(
     "username" => $username,
     "type" => $response->user->type,
     "email" => $response->user->email,
-    "url" => $row->url ?? $response->user->user_id,
+    "url" => $row->url ?: $response->user->user_id,
 )));
 ?>

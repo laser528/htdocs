@@ -1,6 +1,9 @@
 import { Component } from "react";
 import { template } from "./protected_route_template";
-import { WithRouterProps } from "../../../contrib/components/route_component/route_component";
+import {
+  WithRouterProps,
+  withRouting,
+} from "../../../contrib/components/route_component/route_component";
 import {
   ProtectedRouteProps,
   ProtectedRouteController,
@@ -17,3 +20,5 @@ export class ProtectedRoute
     super(props);
   }
 }
+
+export default withRouting<ProtectedRouteProps>(ProtectedRoute);

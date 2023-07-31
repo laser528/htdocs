@@ -24,6 +24,19 @@ function get_user($user_id, $username) {
     return fetch("users/{$extension}", "GET");
 }
 
+function remove_user_locally($user_id, $username = null) {
+    if (!isset($user_id) && !isset($username)) throw new Exception("User ID must be defined");
+
+    $col = isset($user_id) ? "user_id" : "username";
+    $val = $user_id ?: $username;
+
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("DELETE from `users` where {$col}=?");
+    $stmt->bind_param("s", $val);
+    if(!$stmt->execute()) echo json_encode(array("error" => $stmt->error));
+    return json_encode(array("success" => true));
+}
+
 function remove_user($user_id) {
     if (!isset($user_id)) throw new Exception("User ID must be defined");
 
@@ -32,11 +45,7 @@ function remove_user($user_id) {
 
     if (isset($response->error)) return json_encode($response);
 
-    $conn = get_mysql_connection();
-    $stmt = $conn->prepare("DELETE from `users` where user_id=?");
-    $stmt->bind_param("s", $user_id);
-    if(!$stmt->execute()) echo json_encode(array("error" => $stmt->error));
-    return json_encode(array("success" => true));
+    return remove_user_locally($user_id);
 }
 
 function update_user($payload) {
@@ -71,9 +80,9 @@ function create_user($payload) {
     $user = $response->user;
 
     $conn = get_mysql_connection();
-    $stmt = $conn->prepare("INSERT INTO `user` (user_id, last_api_updated, url) VALUES(?,?,?)");
-
+    $stmt = $conn->prepare("INSERT INTO `users` (user_id, last_api_updated, url) VALUES(?,?,?)");
     $stmt->bind_param("sss", $user->user_id, $user->updatedAt, $user->user_id);
+    
     if(!$stmt->execute()) return json_encode(array("error" => $stmt->error));
     else return $api_result;
 

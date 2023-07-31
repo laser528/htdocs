@@ -1,5 +1,4 @@
-import { Md5 } from "ts-md5";
-import { UserType, User } from "./lib";
+import { UserType } from "./lib";
 import { NetworkService } from "../network/network_service";
 import { Subject, Observable, share, switchMap } from "rxjs";
 

@@ -62,12 +62,16 @@ export class LoginForm
   };
 
   private readonly onAuthResponse = (response: any) => {
-    this.setState({ showSpinner: false });
+    console.log(response);
     if (response.error) {
       this.props.onError?.(response.error);
       this.setState({
+        showSpinner: false,
         loginAttempts: this.auththenticationService.canLogin().failedAttempts!,
       });
-    } else window.location.href = `in/${response.url}`;
+    } else {
+      const url = `/in/${response.user.url}`;
+      window.location.href = url;
+    }
   };
 }

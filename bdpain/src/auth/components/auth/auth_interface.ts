@@ -8,7 +8,6 @@ export enum AuthType {
 
 export interface AuthProps {
   type?: AuthType;
-  forgotPasswordId?: string;
 }
 
 export interface AuthState {
@@ -17,6 +16,8 @@ export interface AuthState {
 }
 
 export interface AuthController {
+  forgotPasswordId?: string;
+
   handleAlertClose: () => void;
   onError: (error: string) => void;
 }

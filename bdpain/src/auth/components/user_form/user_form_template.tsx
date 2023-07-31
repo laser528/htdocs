@@ -22,7 +22,7 @@ export function template(
       <Card.Title as="h5" className="text-center mb-5 fw-light fs-5">
         Sign Up
       </Card.Title>
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} autoComplete="off">
         <Form.Floating className={"mb-3"}>
           <Form.Control
             type="text"

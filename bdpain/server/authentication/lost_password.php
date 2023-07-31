@@ -1,6 +1,7 @@
 <?php
 require_once "../contrib/lib.php";
 require_once "../contrib/api_request.php";
+require_once "../users/lib.php";
 set_headers();
 
 $json_data = file_get_contents('php://input');
@@ -11,7 +12,9 @@ if (isset($data->payload->username) && isset($data->payload->email)) {
     $response = json_decode($result);
 
     if(isset($response->error)) {
-        // TODO: Check response error. If user not found, remove user from local DB.
+        if (strpos($response->error, $data->payload->username) != false) {
+            remove_user_locally(null, $data->payload->username);
+        }
         echo json_encode($response);
         exit();
     } else if($response->user->email != $data->payload->email) {
@@ -19,12 +22,12 @@ if (isset($data->payload->username) && isset($data->payload->email)) {
         exit();
     }
 
-    $security = password_hash($username, PASSWORD_DEFAULT);
+    $security = password_hash($data->payload->username, PASSWORD_DEFAULT);
     $conn = get_mysql_connection();
     $stmt = $conn->prepare("INSERT into `forgot_password` (security, user_id) VALUES(?, ?)");
     $stmt->bind_param("ss", $security, $response->user->user_id);
     if(!$stmt->execute()) echo json_encode(array("error" => $stmt->error));
-    echo json_encode(array("success" => true));
+    echo json_encode(array("success" => true, "security" => $security));
 
     $stmt->close();
     exit();

@@ -5,14 +5,15 @@ import {
   WithRouterProps,
   withRouting,
 } from "../../../contrib/components/route_component/route_component";
-import { UserType } from "../../../contrib/services/user/lib";
 import { AppUser } from "../../../contrib/services/user/app_user";
+import { AuthenticationService } from "../../../auth/services/authentication_service";
 
 class Navbar
   extends Component<WithRouterProps<NavbarProps>, NavbarState>
   implements NavbarController
 {
   private readonly appUser = AppUser.getInstance();
+  private readonly authenticationService = AuthenticationService.getInstance();
   render = () => template.call(this, this.props, this.state);
 
   constructor(props: WithRouterProps<NavbarProps>) {
@@ -55,7 +56,8 @@ class Navbar
   }
 
   readonly logout = (event: MouseEvent) => {
-    console.log("Logging Out");
+    this.authenticationService.logout();
+    this.props.navigate("/");
   };
 
   readonly stopImpersonating = (event: MouseEvent) => {
