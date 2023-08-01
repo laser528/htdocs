@@ -134,6 +134,7 @@ export function force_logout_template(
         </Card.Title>
         <Form
           className="form-floating mb-3"
+          id="forceLogoutForm"
           onSubmit={controller.onForceLogoutSubmit}
         >
           <Form.Floating className="mb-3">

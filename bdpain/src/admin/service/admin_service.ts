@@ -7,6 +7,10 @@ interface ImpersonationRequest {
   user_id: string;
 }
 
+interface ForceLogoutRequest {
+  user_id: string;
+}
+
 export class AdminService {
   private readonly networkService = NetworkService.getInstance();
   private readonly requestInfo$ = new Subject<InfoRequest>();
@@ -14,6 +18,9 @@ export class AdminService {
 
   private readonly requestImpersonation$ = new Subject<ImpersonationRequest>();
   private readonly responseImpersonation$: Observable<object>;
+
+  private readonly requestForceLogout$ = new Subject<ForceLogoutRequest>();
+  private readonly responseForceLogout$: Observable<object>;
 
   private static instance: AdminService;
 
@@ -26,6 +33,13 @@ export class AdminService {
     this.responseImpersonation$ = this.requestImpersonation$.pipe(
       switchMap((request) =>
         this.networkService.fetch("admin/impersonate.php", request)
+      ),
+      share()
+    );
+
+    this.responseForceLogout$ = this.requestForceLogout$.pipe(
+      switchMap((request) =>
+        this.networkService.fetch("admin/force_logout.php", request)
       ),
       share()
     );
@@ -47,6 +61,10 @@ export class AdminService {
     this.requestImpersonation$.next(request);
   }
 
+  feedForceLogout(request: ForceLogoutRequest) {
+    this.requestForceLogout$.next(request);
+  }
+
   onInfoSuccess(callback: (response: any) => void) {
     const subscriber = this.responseInfo$.subscribe(callback);
     return () => {
@@ -56,6 +74,13 @@ export class AdminService {
 
   onImpersonationSuccess(callback: (response: any) => void) {
     const subscriber = this.responseImpersonation$.subscribe(callback);
+    return () => {
+      subscriber.unsubscribe();
+    };
+  }
+
+  onForceLogoutSuccess(callback: (response: any) => void) {
+    const subscriber = this.responseForceLogout$.subscribe(callback);
     return () => {
       subscriber.unsubscribe();
     };

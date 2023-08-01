@@ -1,12 +1,6 @@
 <?php
-require_once "rate_limit.php";
+require_once "../contrib/lib.php";
 
-$limiter = RateLimiter::getInstance();
-
-for($i = 0; $i < 100; $i++) {
-echo $limiter->run(function() {
-    return $i;
-});
-}
+echo force_logout("64c7087e9b804e5c6e0af658");
 
 ?>

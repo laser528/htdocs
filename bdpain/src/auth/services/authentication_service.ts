@@ -21,6 +21,11 @@ export class AuthenticationService {
   private failedAttempts = 0;
 
   private constructor() {
+    document.addEventListener("forceLogout", () => {
+      this.logout();
+      window.location.href = "/";
+    });
+
     const userStorage =
       LocalStorage.getItem("user") ?? SessionStorage.getItem("user");
     const impersonationStorage = SessionStorage.getItem("impersonatingUser");
@@ -95,6 +100,7 @@ export class AuthenticationService {
     LocalStorage.removeItem("loginTimer");
     this.failedAttempts = 0;
     this.appUser.removeUser();
+    this.appUser.removeImpersonatingUser();
   }
 
   private get timer() {

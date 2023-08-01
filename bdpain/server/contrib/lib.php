@@ -53,7 +53,7 @@ function force_logout($user_id) {
     $stmt->execute();
     $stmt_result = $stmt->get_result();
     $stmt->close();
-    return $stmt->fetch_object()->count == 0 ? false : true;
+    return $stmt_result->fetch_object()->count == 0 ? false : true;
 }
 
 function force_logout_response() {

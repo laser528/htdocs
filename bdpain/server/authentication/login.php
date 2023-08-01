@@ -32,6 +32,12 @@ if(isset(json_decode($result)->error)) {
 }
 
 $conn = get_mysql_connection();
+$stmt = $conn->prepare("DELETE from `force_logout` where user_id=?");
+$stmt->bind_param("s", $response->user->user_id);
+if(!$stmt->execute()) echo json_encode(array("error" => $stmt->error));
+$stmt->close();
+
+$conn = get_mysql_connection();
 $stmt = $conn->prepare("SELECT url FROM `users` where user_id=?");
 $stmt->bind_param("s", $response->user->user_id);
 $stmt->execute();

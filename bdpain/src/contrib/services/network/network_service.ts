@@ -1,6 +1,7 @@
 import { Observable, map, of, switchMap } from "rxjs";
 import { AppUser } from "../user/app_user";
 import Bottleneck from "bottleneck";
+import { EventService } from "../event/event_service";
 
 export class NetworkService {
   private static instance: NetworkService;
@@ -37,7 +38,14 @@ export class NetworkService {
       fetch(`http://localhost/bdpain/server/${path}`, {
         method: "POST",
         body: JSON.stringify(request),
-      }).then((response) => response.json())
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.logout) {
+            new EventService().fire("forceLogout");
+          }
+          return response;
+        })
     );
   }
 }

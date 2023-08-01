@@ -86,6 +86,20 @@ export class Admin
       }
     );
 
+    this.unsubscribeForceLogout = this.adminService.onForceLogoutSuccess(
+      (response) => {
+        this.setState({ showSpinner: false });
+
+        if (response.error) alert(response.error);
+        else {
+          alert("User will be forced to logout on there next network request");
+          (
+            document.getElementById("forceLogoutForm") as HTMLFormElement
+          ).reset();
+        }
+      }
+    );
+
     this.didMountOrDidUpdate();
     document.addEventListener("beforeunload", this.cleanup);
   }
@@ -116,6 +130,7 @@ export class Admin
     this.unsubscribeSessionRefresh();
     this.unsubscribeInfo();
     this.unsubscribeImpersonation();
+    this.unsubscribeForceLogout();
     window.clearTimeout(this.clearRefreshTimeout);
     window.clearTimeout(this.clearInfoRefreshTimeout);
 
@@ -155,6 +170,15 @@ export class Admin
     const userId = sanitize(formData.get("userId")?.toString() ?? "");
 
     this.adminService.feedImpersonation({ user_id: userId });
+    this.setState({ showSpinner: true });
+  };
+
+  readonly onForceLogoutSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    const userId = sanitize(formData.get("userId")?.toString() ?? "");
+
+    this.adminService.feedForceLogout({ user_id: userId });
     this.setState({ showSpinner: true });
   };
 }
