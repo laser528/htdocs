@@ -1,5 +1,5 @@
 <?php
-/* Makes a new active sessions for a profile or opportunity. */
+/* Makes a new active sessions. */
 
 require_once "../contrib/lib.php";
 require_once "../contrib/api_request.php";

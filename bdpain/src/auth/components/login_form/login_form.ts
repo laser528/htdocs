@@ -62,7 +62,6 @@ export class LoginForm
   };
 
   private readonly onAuthResponse = (response: any) => {
-    console.log(response);
     if (response.error) {
       this.props.onError?.(response.error);
       this.setState({

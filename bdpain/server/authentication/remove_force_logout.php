@@ -1,7 +1,6 @@
 <?php
 require_once "../contrib/lib.php";
 /** On a successful logout, removes the user from the table. */
-/** Login a user. */
 set_headers();
 
 $json_data = file_get_contents('php://input');

@@ -5,13 +5,16 @@ body {
   padding: 0;
   margin: 0;
 }
+
 html {
   height: 100%;
 }
 
 body {
   background: linear-gradient(to right, #0062e6, #33aeff);
-  height: 100%;
+  position: relative;
+  height: auto;
+  min-height: 100% !important;
 }
 
 body {
@@ -29,8 +32,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-#root {
-  height: 100%;
 }

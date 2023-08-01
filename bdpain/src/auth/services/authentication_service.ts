@@ -23,7 +23,10 @@ export class AuthenticationService {
   private constructor() {
     const userStorage =
       LocalStorage.getItem("user") ?? SessionStorage.getItem("user");
+    const impersonationStorage = SessionStorage.getItem("impersonatingUser");
     if (userStorage) this.appUser.setUser(userStorage);
+    if (impersonationStorage)
+      this.appUser.setImpersonatingUser(impersonationStorage);
 
     this.response$ = this.request$.pipe(
       switchMap((request) =>
@@ -88,6 +91,7 @@ export class AuthenticationService {
   logout() {
     LocalStorage.removeItem("user");
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("impersonatingUser");
     LocalStorage.removeItem("loginTimer");
     this.failedAttempts = 0;
     this.appUser.removeUser();

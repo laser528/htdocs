@@ -13,6 +13,7 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
+unset($data->payload->key);
 $result = fetch("opportunities", "POST", $data->payload);
 echo $result;
 ?>

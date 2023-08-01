@@ -20,89 +20,99 @@ export function template(
   state: AppState
 ) {
   return (
-    <main data-bs-theme={state.theme} className="app">
+    <main id="app" data-bs-theme={state.theme} className="app">
       <Navbar></Navbar>
-      <Container>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route
-            path="/auth/login"
-            element={
-              <ProtectedRoute
-                isAllowed={!this.isLoggedIn}
-                redirectPath={`/in/${this.url}`}
-              >
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route
+          path="/auth/login"
+          element={
+            <ProtectedRoute
+              isAllowed={!this.isLoggedIn}
+              redirectPath={`/in/${this.url}`}
+            >
+              <Container className="content-container">
                 <Auth type={AuthType.LOGIN} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/auth/register"
-            element={
-              <ProtectedRoute
-                isAllowed={!this.isLoggedIn}
-                redirectPath={`/in/${this.url}`}
-              >
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auth/register"
+          element={
+            <ProtectedRoute
+              isAllowed={!this.isLoggedIn}
+              redirectPath={`/in/${this.url}`}
+            >
+              <Container className="content-container">
                 <Auth type={AuthType.REGISTER} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/auth/forgot"
-            element={
-              <ProtectedRoute
-                isAllowed={!this.isLoggedIn}
-                redirectPath={`/in/${this.url}`}
-              >
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auth/forgot"
+          element={
+            <ProtectedRoute
+              isAllowed={!this.isLoggedIn}
+              redirectPath={`/in/${this.url}`}
+            >
+              <Container className="content-container">
                 <Auth type={AuthType.FORGOT} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/auth/forgot/:security"
-            element={
-              <ProtectedRoute
-                isAllowed={!this.isLoggedIn}
-                redirectPath={`/in/${this.url}`}
-              >
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auth/forgot/:security"
+          element={
+            <ProtectedRoute
+              isAllowed={!this.isLoggedIn}
+              redirectPath={`/in/${this.url}`}
+            >
+              <Container className="content-container">
                 <Auth type={AuthType.FORGOT} />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute
-                isAllowed={this.isLoggedIn && this.userType === UserType.ADMIN}
-                redirectPath={`/in/${this.url}`}
-              >
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/opportunities"
-            element={
-              <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute
+              isAllowed={this.isLoggedIn && this.userType === UserType.ADMIN}
+              redirectPath={`/in/${this.url}`}
+            >
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/opportunities"
+          element={
+            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              <Container className="content-container">
                 <Opportunity />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/opportunities/:id"
-            element={
-              <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/opportunities/:id"
+          element={
+            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              <Container className="content-container">
                 <Opportunity />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Container>
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <footer className="footer bg-body-tertiary">
         <Container>
           <span className="text-muted">
-            @copy; 2023 InBDPA. All rights reserved.
+            &copy;2023 InBDPA. All rights reserved.
           </span>
         </Container>
       </footer>

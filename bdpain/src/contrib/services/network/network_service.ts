@@ -1,9 +1,14 @@
 import { Observable, map, of, switchMap } from "rxjs";
 import { AppUser } from "../user/app_user";
+import Bottleneck from "bottleneck";
 
 export class NetworkService {
   private static instance: NetworkService;
   private readonly appUser = AppUser.getInstance();
+  private readonly limiter = new Bottleneck({
+    minTime: 200,
+    maxConcurrent: 1,
+  });
 
   private constructor() {}
 
@@ -28,9 +33,11 @@ export class NetworkService {
   }
 
   private networkRequest(path: string, request: object): Promise<any> {
-    return fetch(`http://localhost/bdpain/server/${path}`, {
-      method: "POST",
-      body: JSON.stringify(request),
-    }).then((response) => response.json());
+    return this.limiter.schedule(() =>
+      fetch(`http://localhost/bdpain/server/${path}`, {
+        method: "POST",
+        body: JSON.stringify(request),
+      }).then((response) => response.json())
+    );
   }
 }

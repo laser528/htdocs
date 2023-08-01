@@ -37,10 +37,10 @@ export function template(
               <Card.Text className="d-inline me-1 text-muted">
                 Views: {views}
               </Card.Text>
-              {/* <Card.Text className="d-inline me-1 text-muted fs-5">·</Card.Text>
+              <Card.Text className="d-inline me-1 text-muted fs-5">·</Card.Text>
               <Card.Text className="d-inline text-muted">
-                Active Viewers
-              </Card.Text> */}
+                Active Viewers: {state.activeViews}
+              </Card.Text>
             </span>
           </span>
         </Card.Body>

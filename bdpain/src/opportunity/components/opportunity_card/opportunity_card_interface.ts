@@ -13,6 +13,8 @@ export interface OpportunityCardProps {
   className?: string;
 }
 
-export interface OpportunityCardState {}
+export interface OpportunityCardState {
+  activeViews: number;
+}
 
 export interface OpportunityCardController {}

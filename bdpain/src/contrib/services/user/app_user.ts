@@ -1,5 +1,6 @@
 import { Md5 } from "ts-md5";
 import { UserType, User } from "./lib";
+import { SessionStorage } from "../storage/storage";
 
 // The Apps Currently LoggedIn User.
 export class AppUser {
@@ -32,6 +33,7 @@ export class AppUser {
 
   setImpersonatingUser(user: User) {
     this.impersonatingUser = user;
+    SessionStorage.setItem("impersonatingUser", JSON.stringify(user));
   }
 
   getImpersonatingUser() {
@@ -40,6 +42,7 @@ export class AppUser {
 
   removeImpersonatingUser() {
     this.impersonatingUser = undefined;
+    SessionStorage.removeItem("impersonatingUser");
   }
 
   getUserType(): UserType {
