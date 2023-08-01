@@ -204,7 +204,9 @@ export class OpportunityView
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const title = sanitize(formData.get("title")?.toString() ?? "");
-    const contents = sanitize(formData.get("contents")?.toString() ?? "");
+    const contents = sanitize(formData.get("contents")?.toString() ?? "", {
+      USE_PROFILES: { html: true },
+    });
 
     this.setState({ showEditSpinner: true });
     this.opportunityService.feedManageOpportunity({

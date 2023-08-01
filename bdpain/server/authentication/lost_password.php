@@ -22,12 +22,11 @@ if (isset($data->payload->username) && isset($data->payload->email)) {
         exit();
     }
 
-    $security = password_hash($data->payload->username, PASSWORD_DEFAULT);
+    $token = substr(hash('sha512', mt_rand() . microtime()), 0, 50);
     $conn = get_mysql_connection();
     $stmt = $conn->prepare("INSERT into `forgot_password` (security, user_id) VALUES(?, ?)");
-    $stmt->bind_param("ss", $security, $response->user->user_id);
-    if(!$stmt->execute()) echo json_encode(array("error" => $stmt->error));
-    echo json_encode(array("success" => true, "security" => $security));
+    $stmt->bind_param("ss", $token, $response->user->user_id);
+    echo json_encode(array("success" => true, "security" => $token));
 
     $stmt->close();
     exit();

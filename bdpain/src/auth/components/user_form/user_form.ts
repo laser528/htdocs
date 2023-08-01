@@ -77,6 +77,11 @@ export class UserForm
     const email = sanitize(formData.get("email")?.toString() ?? "");
     const password = sanitize(formData.get("password")?.toString() ?? "");
 
+    if (this.getPasswordStrength(password).variant === "WEAK") {
+      this.props.onError?.("Your password must be longer!");
+      return;
+    }
+
     this.userService.feedUser({
       username,
       email,
@@ -86,8 +91,7 @@ export class UserForm
     this.setState({ showSpinner: true });
   };
 
-  get passwordStrength() {
-    const password = this.state.password;
+  private getPasswordStrength(password: string) {
     let strength = "WEAK";
     let className = "danger";
 
@@ -104,5 +108,9 @@ export class UserForm
       variant: strength,
       class: className,
     };
+  }
+
+  get passwordStrength() {
+    return this.getPasswordStrength(this.state.password);
   }
 }

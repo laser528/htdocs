@@ -18,6 +18,7 @@ export class ForceLogout
 
   constructor(props: ForceLogoutProps) {
     super(props);
+    this.state = { showSpinner: false };
   }
 
   componentDidMount(): void {
