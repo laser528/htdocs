@@ -1,5 +1,13 @@
-export interface ForceLogoutProps {}
+import { FormEvent } from "react";
 
-export interface ForceLogoutState {}
+export interface ForceLogoutProps {
+  onError?: (error: string) => {};
+}
 
-export interface ForceLogoutController {}
+export interface ForceLogoutState {
+  showSpinner: boolean;
+}
+
+export interface ForceLogoutController {
+  onForceLogoutSubmit: (event: FormEvent) => void;
+}

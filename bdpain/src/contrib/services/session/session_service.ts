@@ -32,9 +32,13 @@ export class SessionService {
 
   private constructor() {
     this.responseCreate$ = this.requestCreate$.pipe(
-      switchMap((request) =>
-        this.networkService.fetch("session/create_session.php", request)
-      ),
+      switchMap((request) => {
+        const payload = {
+          view: request.view,
+          viewed_id: request.viewed_id || null,
+        };
+        return this.networkService.fetch("session/create_session.php", payload);
+      }),
       share()
     );
 

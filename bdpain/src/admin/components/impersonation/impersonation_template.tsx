@@ -1,34 +1,33 @@
 import React from "react";
 
-import "./force_logout.scss";
+import "./impersonation.scss";
 import {
-  ForceLogoutController,
-  ForceLogoutProps,
-  ForceLogoutState,
-} from "./force_logout_interface";
+  ImpersonationController,
+  ImpersonationProps,
+  ImpersonationState,
+} from "./impersonation_interface";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import { Spinner } from "../../../contrib/components/spinner/spinner";
 
 export function template(
-  this: ForceLogoutController,
-  props: ForceLogoutProps,
-  state: ForceLogoutState
+  this: ImpersonationController,
+  props: ImpersonationProps,
+  state: ImpersonationState
 ) {
   return (
-    <Container>
-      <Card.Title className="mt-3">Force Logout</Card.Title>
+    <Container fluid="md">
+      <Card.Title className="mt-3">Start Impersonation</Card.Title>
       <Row className="col-12">
         <Card.Title as="h5" className="text-center mb-5 fw-light fs-5">
-          Force Non-Admin User to Logout
+          Select Non-Admin User
         </Card.Title>
         <Form
           className="form-floating mb-3"
-          id="forceLogoutForm"
-          onSubmit={this.onForceLogoutSubmit}
+          onSubmit={this.onImpersonationSubmit}
         >
           <Form.Floating className="mb-3">
             <Form.Control
@@ -46,7 +45,7 @@ export function template(
               variant="primary"
               className="btn-login text-uppercase fw-bold"
             >
-              Force Logout {state.showSpinner ? <Spinner /> : null}
+              Impersonate {state.showSpinner ? <Spinner /> : null}
             </Button>
           </div>
         </Form>
