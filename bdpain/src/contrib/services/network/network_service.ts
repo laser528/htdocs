@@ -25,8 +25,8 @@ export class NetworkService {
     return of(payload).pipe(
       map((payload) => {
         let request = { payload };
-        const userId = this.appUser.getUserID();
-        if (!!userId) request = Object.assign(request, { userId });
+        const user_id = this.appUser.getUserID();
+        if (!!user_id) request = Object.assign(request, { user_id });
         return request;
       }),
       switchMap((request) => this.networkRequest(path, request))

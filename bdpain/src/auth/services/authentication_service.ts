@@ -1,6 +1,13 @@
 import { NetworkService } from "../../contrib/services/network/network_service";
 import { AppUser } from "../../contrib/services/user/app_user";
-import { Observable, Subject, of, share, switchMap } from "rxjs";
+import {
+  Observable,
+  Subject,
+  of,
+  share,
+  switchMap,
+  firstValueFrom,
+} from "rxjs";
 import {
   LocalStorage,
   SessionStorage,
@@ -22,8 +29,14 @@ export class AuthenticationService {
 
   private constructor() {
     document.addEventListener("forceLogout", () => {
-      this.logout();
-      window.location.href = "/";
+      firstValueFrom(
+        this.networkService.fetch("authentication/remove_force_logout.php", {
+          user_id: this.appUser.getUserID(),
+        })
+      ).then((response) => {
+        this.logout();
+        window.location.href = "/";
+      });
     });
 
     const userStorage =
