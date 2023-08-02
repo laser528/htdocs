@@ -1,4 +1,4 @@
-import { UserType } from "../../../contrib/services/user/lib";
+import { UserType } from "../../../contrib/user/models/user";
 
 export enum AppTheme {
   LIGHT = "light",

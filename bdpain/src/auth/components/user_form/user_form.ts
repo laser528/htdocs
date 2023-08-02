@@ -6,8 +6,8 @@ import {
   UserFormController,
   UserFormState,
 } from "./user_form_interface";
-import { UserService } from "../../../contrib/services/user/user_service";
-import { UserType } from "../../../contrib/services/user/lib";
+import { UserService } from "../../../contrib/user/services/user_service/user_service";
+import { UserType } from "../../../contrib/user/models/user";
 
 export class UserForm
   extends Component<UserFormProps, UserFormState>
@@ -32,7 +32,9 @@ export class UserForm
   }
 
   componentDidMount(): void {
-    this.unsubscribe = this.userService.onUserSuccess(this.onUserResponse);
+    this.unsubscribe = this.userService.onUserModifySuccess(
+      this.onUserResponse
+    );
   }
 
   componentWillUnmount(): void {
@@ -82,7 +84,7 @@ export class UserForm
       return;
     }
 
-    this.userService.feedUser({
+    this.userService.feedModifyRequest({
       username,
       email,
       password,

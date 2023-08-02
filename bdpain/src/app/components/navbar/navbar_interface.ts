@@ -1,5 +1,5 @@
 import { Location } from "react-router-dom";
-import { UserType } from "../../../contrib/services/user/lib";
+import { UserType } from "../../../contrib/user/models/user";
 import { MouseEvent } from "react";
 
 export interface NavbarProps {}

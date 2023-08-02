@@ -8,7 +8,7 @@ import {
 import { OpportunityService } from "../../services/opportunity_service";
 import { SessionService } from "../../../contrib/services/session/session_service";
 import { SessionType } from "../../../contrib/services/session/lib";
-import { AppUser } from "../../../contrib/services/user/app_user";
+import { UserService } from "../../../contrib/user/services/user_service/user_service";
 import { sanitize } from "isomorphic-dompurify";
 
 export class OpportunityView
@@ -16,7 +16,7 @@ export class OpportunityView
   implements OpportunityViewController
 {
   private readonly opportunityService = OpportunityService.getInstance();
-  private readonly appUser = AppUser.getInstance();
+  private readonly userService = UserService.getInstance();
   private readonly sessionService = SessionService.getInstance();
   private sessionId = "";
   private unsubscribeSessionCount = () => {};
@@ -71,7 +71,7 @@ export class OpportunityView
         this.setState({
           opportunity: response.opportunity,
           canModifyOpportunity:
-            this.appUser.getUserID() === response.opportunity.creator_id,
+            this.userService.getUserID() === response.opportunity.creator_id,
         });
       }
     );
@@ -99,7 +99,7 @@ export class OpportunityView
         this.setState({
           opportunity: response.opportunity,
           canModifyOpportunity:
-            this.appUser.getUserID() === response.opportunity.creator_id,
+            this.userService.getUserID() === response.opportunity.creator_id,
           showEditModal: false,
         });
       });

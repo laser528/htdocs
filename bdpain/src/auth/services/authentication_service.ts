@@ -1,5 +1,4 @@
 import { NetworkService } from "../../contrib/services/network/network_service";
-import { AppUser } from "../../contrib/services/user/app_user";
 import {
   Observable,
   Subject,
@@ -12,6 +11,8 @@ import {
   LocalStorage,
   SessionStorage,
 } from "../../contrib/services/storage/storage";
+import { UserService } from "../../contrib/user/services/user_service/user_service";
+import { User } from "../../contrib/user/models/user";
 
 interface AuthRequest {
   username: string;
@@ -22,7 +23,7 @@ interface AuthRequest {
 export class AuthenticationService {
   private static instance: AuthenticationService;
   private readonly networkService = NetworkService.getInstance();
-  private readonly appUser = AppUser.getInstance();
+  private readonly userService = UserService.getInstance();
   private readonly request$ = new Subject<AuthRequest>();
   private readonly response$: Observable<object>;
   private failedAttempts = 0;
@@ -31,7 +32,7 @@ export class AuthenticationService {
     document.addEventListener("forceLogout", () => {
       firstValueFrom(
         this.networkService.fetch("authentication/remove_force_logout.php", {
-          user_id: this.appUser.getUserID(),
+          payload: { user_id: this.userService.getId() },
         })
       ).then((response) => {
         this.logout();
@@ -39,44 +40,39 @@ export class AuthenticationService {
       });
     });
 
-    const userStorage =
-      LocalStorage.getItem("user") ?? SessionStorage.getItem("user");
-    const impersonationStorage = SessionStorage.getItem("impersonatingUser");
-    if (userStorage) this.appUser.setUser(userStorage);
-    if (impersonationStorage)
-      this.appUser.setImpersonatingUser(impersonationStorage);
-
     this.response$ = this.request$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("authentication/login.php", request).pipe(
-          switchMap((response: any) => {
-            if (!response.success) {
-              this.failedAttempts++;
-              if (this.failedAttempts === 3) {
-                this.failedAttempts = 0;
-                LocalStorage.setItem("loginTimer", Date.now().toString());
+        this.networkService
+          .fetch("authentication/login.php", { payload: request })
+          .pipe(
+            switchMap((response: any) => {
+              if (!response.success) {
+                this.failedAttempts++;
+                if (this.failedAttempts === 3) {
+                  this.failedAttempts = 0;
+                  LocalStorage.setItem("loginTimer", Date.now().toString());
+                }
+                return of(response);
+              }
+
+              const user = new User({
+                user_id: response.user.user_id,
+                username: response.user.username,
+                email: response.user.email,
+                type: response.user.type,
+                url: response.user.url,
+              });
+
+              this.userService.setUser(user);
+
+              if (request.rememberMe) {
+                LocalStorage.setItem("user", JSON.stringify(user));
+              } else {
+                SessionStorage.setItem("user", JSON.stringify(user));
               }
               return of(response);
-            }
-
-            const user = {
-              userId: response.user.user_id,
-              username: response.user.username,
-              email: response.user.email,
-              type: response.user.type,
-              url: response.user.url,
-            };
-
-            this.appUser.setUser(user);
-
-            if (request.rememberMe) {
-              LocalStorage.setItem("user", JSON.stringify(user));
-            } else {
-              SessionStorage.setItem("user", JSON.stringify(user));
-            }
-            return of(response);
-          })
-        )
+            })
+          )
       ),
       share()
     );
@@ -103,7 +99,12 @@ export class AuthenticationService {
   }
 
   isLoggedIn() {
-    return !!this.appUser.getUser();
+    console.log(
+      this.userService.getUser(),
+      this.userService.getImpersonator(),
+      this.userService.getId()
+    );
+    return !!this.userService.getId();
   }
 
   logout() {
@@ -112,8 +113,8 @@ export class AuthenticationService {
     sessionStorage.removeItem("impersonatingUser");
     LocalStorage.removeItem("loginTimer");
     this.failedAttempts = 0;
-    this.appUser.removeUser();
-    this.appUser.removeImpersonatingUser();
+    this.userService.removeUser();
+    this.userService.removeImpersonator();
   }
 
   private get timer() {

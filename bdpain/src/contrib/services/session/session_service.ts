@@ -1,6 +1,7 @@
 import { NetworkService } from "../../../contrib/services/network/network_service";
 import { Subject, Observable, share, switchMap, map } from "rxjs";
 import { SessionType } from "./lib";
+import { UserService } from "../../user/services/user_service/user_service";
 
 interface SessionRequest {
   view: SessionType;
@@ -20,6 +21,7 @@ interface SessionCountRequest {
 
 export class SessionService {
   private readonly networkService = NetworkService.getInstance();
+  private readonly userService = UserService.getInstance();
   private readonly requestCreate$ = new Subject<SessionRequest>();
   private readonly responseCreate$: Observable<object>;
 
@@ -39,6 +41,7 @@ export class SessionService {
         };
         return this.networkService.fetch("session/create_session.php", {
           payload,
+          user_id: this.userService.getId(),
         });
       }),
       share()
@@ -53,6 +56,7 @@ export class SessionService {
           payload: {
             session_id: request.session_id,
           },
+          user_id: this.userService.getId(),
         });
       }),
       share()
@@ -70,6 +74,7 @@ export class SessionService {
                 : {
                     opportunity_id: request.id,
                   },
+            user_id: this.userService.getId(),
           })
           .pipe(
             map((response) => {

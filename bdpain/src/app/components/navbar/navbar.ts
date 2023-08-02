@@ -5,14 +5,14 @@ import {
   WithRouterProps,
   withRouting,
 } from "../../../contrib/components/route_component/route_component";
-import { AppUser } from "../../../contrib/services/user/app_user";
+import { UserService } from "../../../contrib/user/services/user_service/user_service";
 import { AuthenticationService } from "../../../auth/services/authentication_service";
 
 class Navbar
   extends Component<WithRouterProps<NavbarProps>, NavbarState>
   implements NavbarController
 {
-  private readonly appUser = AppUser.getInstance();
+  private readonly userService = UserService.getInstance();
   private readonly authenticationService = AuthenticationService.getInstance();
   render = () => template.call(this, this.props, this.state);
 
@@ -40,19 +40,19 @@ class Navbar
   }
 
   get url() {
-    return this.appUser.getUrl();
+    return this.userService.getUrl();
   }
 
   get userType() {
-    return this.appUser.getUserType();
+    return this.userService.getUserType();
   }
 
   get emailHash() {
-    return this.appUser.getUserEmailHash();
+    return this.userService.getUserEmailHash();
   }
 
   get isImpersonating() {
-    return !!this.appUser.getImpersonatingUser();
+    return !!this.userService.getImpersonator();
   }
 
   readonly logout = (event: MouseEvent) => {
@@ -61,7 +61,7 @@ class Navbar
   };
 
   readonly stopImpersonating = (event: MouseEvent) => {
-    this.appUser.removeImpersonatingUser();
+    this.userService.removeImpersonator();
     this.props.navigate("/admin");
   };
 }

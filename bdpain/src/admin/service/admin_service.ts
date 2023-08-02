@@ -32,14 +32,16 @@ export class AdminService {
 
     this.responseImpersonation$ = this.requestImpersonation$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("admin/impersonate.php", request)
+        this.networkService.fetch("admin/impersonate.php", { payload: request })
       ),
       share()
     );
 
     this.responseForceLogout$ = this.requestForceLogout$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("admin/force_logout.php", request)
+        this.networkService.fetch("admin/force_logout.php", {
+          payload: request,
+        })
       ),
       share()
     );

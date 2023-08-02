@@ -10,7 +10,7 @@ import { Landing } from "../../../landing/components/landing/landing";
 import Auth from "../../../auth/components/auth/auth";
 import { AuthType } from "../../../auth/components/auth/auth_interface";
 import ProtectedRoute from "../protected_route/protected_route";
-import { UserType } from "../../../contrib/services/user/lib";
+import { UserType } from "../../../contrib/user/models/user";
 import { Admin } from "../../../admin/components/admin/admin";
 import Opportunity from "../../../opportunity/components/opportunity/opportunity";
 import Profile from "../../../profile/components/profile/profile";

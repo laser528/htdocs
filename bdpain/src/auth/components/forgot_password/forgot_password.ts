@@ -40,8 +40,10 @@ export class ForgotPassword
     this.setState({ showSpinner: true });
     const response = await firstValueFrom(
       this.networkService.fetch("authentication/lost_password.php", {
-        username,
-        email,
+        payload: {
+          username,
+          email,
+        },
       })
     );
 
@@ -71,8 +73,10 @@ export class ForgotPassword
     this.setState({ showSpinner: true });
     const response = await firstValueFrom(
       this.networkService.fetch("authentication/lost_password.php", {
-        password,
-        security: this.props.security ?? "",
+        payload: {
+          password,
+          security: this.props.security ?? "",
+        },
       })
     );
 
