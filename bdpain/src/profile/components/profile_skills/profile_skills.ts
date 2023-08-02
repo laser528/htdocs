@@ -14,5 +14,10 @@ export class ProfileSkills
 
   constructor(props: ProfileSkillsProps) {
     super(props);
+    this.state = { skills: props.skills?.slice(0, 10) ?? [] };
   }
+
+  readonly skillsFormat = (skill: string) => {
+    return skill.slice(0, 30);
+  };
 }

@@ -18,7 +18,11 @@ $result = fetch("users/{$data->payload->user_id}/connections/{$data->payload->co
 $response = json_decode($result);
 
 if(isset($response->error)) {
-    // TODO: Check response error. If user not found, remove user from local DB.
+    if(isset($response->error)) {
+        if (strpos($response->error, $data->payload->user_id) != false) {
+            remove_user_locally($data->payload->user_id, null);
+        }
+    }
     echo json_encode($response);
     exit();
 }

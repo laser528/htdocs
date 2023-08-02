@@ -21,7 +21,7 @@ export function template(
   return (
     <Container>
       <Card.Title className="mt-3">Force Logout</Card.Title>
-      <Row className="col-12">
+      <Row className="col-8">
         <Card.Title as="h5" className="text-center mb-5 fw-light fs-5">
           Force Non-Admin User to Logout
         </Card.Title>

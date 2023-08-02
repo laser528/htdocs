@@ -14,5 +14,6 @@ export class ProfileTop
 
   constructor(props: ProfileTopProps) {
     super(props);
+    this.state = { url: props.user.getUrl() };
   }
 }

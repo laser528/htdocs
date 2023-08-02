@@ -13,7 +13,7 @@ import ProtectedRoute from "../protected_route/protected_route";
 import { UserType } from "../../../contrib/services/user/lib";
 import { Admin } from "../../../admin/components/admin/admin";
 import Opportunity from "../../../opportunity/components/opportunity/opportunity";
-import { ProfileView } from "../../../profile/components/profile_view/profile_view";
+import Profile from "../../../profile/components/profile/profile";
 
 export function template(
   this: AppController,
@@ -112,7 +112,7 @@ export function template(
           path="/in/:id"
           element={
             <Container className="content-container">
-              <ProfileView />
+              <Profile />
             </Container>
           }
         />

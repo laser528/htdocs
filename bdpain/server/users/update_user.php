@@ -13,5 +13,9 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
-echo update_profile($data->payload);
+$user_id = $data->payload->user_id;
+unset($data->payload->user_id);
+
+$result = fetch("users/{$user_id}", "PATCH", $data->payload);
+echo $result;
 ?>

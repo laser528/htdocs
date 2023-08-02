@@ -1,11 +1,9 @@
-import { Observable, map, of, switchMap } from "rxjs";
-import { AppUser } from "../user/app_user";
+import { Observable, of, switchMap } from "rxjs";
 import Bottleneck from "bottleneck";
 import { EventService } from "../event/event_service";
 
 export class NetworkService {
   private static instance: NetworkService;
-  private readonly appUser = AppUser.getInstance();
   private readonly limiter = new Bottleneck({
     minTime: 200,
     maxConcurrent: 1,
@@ -23,12 +21,6 @@ export class NetworkService {
 
   public fetch(path: string, payload = {}): Observable<any> {
     return of(payload).pipe(
-      map((payload) => {
-        let request = { payload };
-        const user_id = this.appUser.getUserID();
-        if (!!user_id) request = Object.assign(request, { user_id });
-        return request;
-      }),
       switchMap((request) => this.networkRequest(path, request))
     );
   }

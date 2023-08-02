@@ -8,10 +8,5 @@ set_headers();
 $json_data = file_get_contents('php://input');
 $data = json_decode($json_data);
 
-if (isset($data->user_id) && force_logout($data->user_id)) {
-    force_logout_response();
-    exit();
-}
-
-echo update_profile($data->payload);
+echo get_users(null, $data->payload->after);
 ?>

@@ -37,7 +37,9 @@ export class SessionService {
           view: request.view,
           viewed_id: request.viewed_id || null,
         };
-        return this.networkService.fetch("session/create_session.php", payload);
+        return this.networkService.fetch("session/create_session.php", {
+          payload,
+        });
       }),
       share()
     );
@@ -48,7 +50,9 @@ export class SessionService {
           ? "remove_session.php"
           : "update_session.php";
         return this.networkService.fetch(`session/${path}`, {
-          session_id: request.session_id,
+          payload: {
+            session_id: request.session_id,
+          },
         });
       }),
       share()
@@ -57,16 +61,16 @@ export class SessionService {
     this.responseCount$ = this.requestCount$.pipe(
       switchMap((request) =>
         this.networkService
-          .fetch(
-            "session/count_session.php",
-            request.type === "profile"
-              ? {
-                  user_id: request.id,
-                }
-              : {
-                  opportunity_id: request.id,
-                }
-          )
+          .fetch("session/count_session.php", {
+            payload:
+              request.type === "profile"
+                ? {
+                    user_id: request.id,
+                  }
+                : {
+                    opportunity_id: request.id,
+                  },
+          })
           .pipe(
             map((response) => {
               return { ...response, key: request.type };

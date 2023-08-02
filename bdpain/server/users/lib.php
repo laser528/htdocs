@@ -19,9 +19,18 @@ function get_users($updatedAfter, $after) {
 /** Gets a users data. */
 function get_user($user_id, $username) {
     if (!isset($user_id) && !isset($username)) throw new Exception("User Name or ID must be provided");
-    $extension = $user_id ?? $username;
+    $extension = $user_id ?: $username;
+
+    $result = fetch("users/{$extension}", "GET");
+    $response = json_decode($result);
+
+    if(isset($response->error)) {
+        if (strpos($response->error, $data->payload->user_id) != false) {
+            remove_user_locally($data->payload->user_id, null);
+        }
+    }
     
-    return fetch("users/{$extension}", "GET");
+    return $result;
 }
 
 function remove_user_locally($user_id, $username = null) {
@@ -48,7 +57,7 @@ function remove_user($user_id) {
     return remove_user_locally($user_id);
 }
 
-function update_user($payload) {
+function update_profile($payload) {
     if (!isset($payload) || !isset($payload->user_id)) throw new Exception("User ID must be defined");
 
     $user_id = $payload->user_id;
@@ -69,8 +78,8 @@ function create_user($payload) {
     $api_result = fetch("users", "POST", array(
         "username" => $payload->username,
         "email" => $payload->email,
-        "salt" => $api_salt,
-        "key" => $key,
+        "salt" => $payload->salt ?: $api_salt,
+        "key" => $payload->key ?: $key,
         "type" => $payload->type,
     ));
 
@@ -82,10 +91,8 @@ function create_user($payload) {
     $conn = get_mysql_connection();
     $stmt = $conn->prepare("INSERT INTO `users` (user_id, last_api_updated, url) VALUES(?,?,?)");
     $stmt->bind_param("sss", $user->user_id, $user->updatedAt, $user->user_id);
-    
-    if(!$stmt->execute()) return json_encode(array("error" => $stmt->error));
-    else return $api_result;
-
+    $stmt->execute();
     $stmt->close();
+    return $api_result;
 }
 ?>

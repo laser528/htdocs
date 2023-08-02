@@ -14,6 +14,7 @@ import "./admin.scss";
 import { Stats } from "../stats/stats";
 import { Impersonation } from "../impersonation/impersonation";
 import { ForceLogout } from "../force_logout/force_logout";
+import { ModifyUsers } from "../modfiy_users/modify_users";
 
 export function modify_users_template(
   controller: AdminController,
@@ -28,45 +29,48 @@ export function template(
 ) {
   return (
     <Container id="admin_container" fluid>
-      <Row className="col-12">
-        <Col className="admin_sidebar col-2">
-          <Card className="admin_sidebar border-0 rounded-0 mt-4">
-            <Nav defaultActiveKey="/home" className="flex-column">
-              <Nav.Link
-                href="#"
-                onClick={this.onInfoClick}
-                className="admin_sidebar_links"
-              >
-                Sites Info
-              </Nav.Link>
-              <Nav.Link
-                href="#"
-                onClick={this.onImpersonationClick}
-                className="admin_sidebar_links"
-              >
-                Start Impersonation
-              </Nav.Link>
-              <Nav.Link
-                href="#"
-                onClick={this.onForceLogoutClick}
-                className="admin_sidebar_links"
-              >
-                Force Logout
-              </Nav.Link>
-              <Nav.Link
-                href="#"
-                onClick={this.onModifyUsersClick}
-                className="admin_sidebar_links"
-              >
-                Modify Users
-              </Nav.Link>
-            </Nav>
-          </Card>
-        </Col>
-        <Col className="col-10 admin_content mt-4">
-          {state.view === AdminView.INFO && <Stats />}
-          {state.view === AdminView.IMPERSONATION && <Impersonation />}
-          {state.view === AdminView.LOGOUT && <ForceLogout />}
+      <Row>
+        <Col xl={12}>
+          <Col xl={2} className="admin_sidebar">
+            <Card className="admin_sidebar border-0 rounded-0 mt-4">
+              <Nav defaultActiveKey="/home" className="flex-column">
+                <Nav.Link
+                  href="#"
+                  onClick={this.onInfoClick}
+                  className="admin_sidebar_links"
+                >
+                  Sites Info
+                </Nav.Link>
+                <Nav.Link
+                  href="#"
+                  onClick={this.onImpersonationClick}
+                  className="admin_sidebar_links"
+                >
+                  Start Impersonation
+                </Nav.Link>
+                <Nav.Link
+                  href="#"
+                  onClick={this.onForceLogoutClick}
+                  className="admin_sidebar_links"
+                >
+                  Force Logout
+                </Nav.Link>
+                <Nav.Link
+                  href="#"
+                  onClick={this.onModifyUsersClick}
+                  className="admin_sidebar_links"
+                >
+                  Modify Users
+                </Nav.Link>
+              </Nav>
+            </Card>
+          </Col>
+          <Col xl={10} className="admin_content mt-2 ms-4">
+            {state.view === AdminView.INFO && <Stats />}
+            {state.view === AdminView.IMPERSONATION && <Impersonation />}
+            {state.view === AdminView.LOGOUT && <ForceLogout />}
+            {state.view === AdminView.USERS && <ModifyUsers />}
+          </Col>
         </Col>
       </Row>
     </Container>
