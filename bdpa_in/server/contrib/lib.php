@@ -24,9 +24,7 @@ function bdpa_fetch($endpoint, $method = "GET", $payload = null) {
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
     );
-
-    echo $opt[CURLOPT_URL];
-
+    
     if ($payload) $opt[CURLOPT_POSTFIELDS] = json_encode($payload);
 
     $ch = curl_init();
