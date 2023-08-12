@@ -12,6 +12,4 @@ if($file_open) {
     }
     fclose($file_open);
 }
-
-echo print_r($_ENV);
 ?>
