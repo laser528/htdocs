@@ -5,7 +5,7 @@ import {
   ProfileSkillsState,
 } from "./profile_skills_interface";
 import Card from "react-bootstrap/Card";
-import Image from "react-bootstrap/Image";
+import Image from 'react-bootstrap/Image';
 
 export function template(
   this: ProfileSkillsController,
@@ -13,17 +13,27 @@ export function template(
   state: ProfileSkillsState
 ) {
   return (
-    <Card className="card border-0 shadow rounded-3 px-4 py-2">
-      <Card.Title className="fs-5 bolded">Skills</Card.Title>
-      {state.skills?.map((item, index) => {
-        return (
-          <div key={`skills-${index}`}>
-            <Card.Subtitle className="bolded">
-              {this.skillsFormat(item)}
-            </Card.Subtitle>
-          </div>
-        );
-      })}
-    </Card>
+    <>
+      <div className="py-2 row">
+        <Card.Title className="pb-2 fs-5 bolded">Skills</Card.Title>
+        <Card.Subtitle className="bolded">Skill Name</Card.Subtitle>
+        <div className="p-0">
+          <Card.Body>
+            <span className="d-inline">
+              <Image src="../../../favicon.ico" className="me-1" style={{height: 20}}></Image>
+              <Card.Text className="d-inline">
+                Executive Worker
+              </Card.Text>
+              <Card.Text className="d-inline mx-1">
+                at
+              </Card.Text>
+              <Card.Text className="d-inline">
+                Location
+              </Card.Text>
+            </span>
+          </Card.Body>
+        </div>
+      </div>
+    </>
   );
 }

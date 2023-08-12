@@ -13,19 +13,5 @@ if (isset($data->user_id) && force_logout($data->user_id)) {
     exit();
 }
 
-$url = $data->payload->url;
-
-$conn = get_mysql_connection();
-$stmt = $conn->prepare("SELECT user_id FROM `users` WHERE url=?");
-$stmt->bind_param("s", $url);
-$stmt->execute();
-$stmt_result = $stmt->get_result();
-$row = $stmt_result->fetch_object();
-$stmt->close();
-
-if (!isset($row->user_id)) {
-    echo array("error" => "user not found");
-}
-
-echo get_user($row->user_id, null);
+echo get_user($data->payload->user_id);
 ?>

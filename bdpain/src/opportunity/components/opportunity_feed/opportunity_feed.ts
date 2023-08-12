@@ -7,15 +7,15 @@ import {
   OpportunityFeedController,
   OpportunityFeedState,
 } from "./opportunity_feed_interface";
-import { UserService } from "../../../contrib/user/services/user_service/user_service";
-import { UserType } from "../../../contrib/user/models/user";
+import { AppUser } from "../../../contrib/services/user/app_user";
+import { UserType } from "../../../contrib/services/user/lib";
 
 export class OpportunityFeed
   extends Component<OpportunityFeedProps, OpportunityFeedState>
   implements OpportunityFeedController
 {
   private readonly opportunityService = OpportunityService.getInstance();
-  private readonly userService = UserService.getInstance();
+  private readonly appUser = AppUser.getInstance();
   private unsubscribeOpportunityFeed = () => {};
   private unsubscribeManageOpportunity = () => {};
   render = () => template.call(this, this.props, this.state);
@@ -25,7 +25,7 @@ export class OpportunityFeed
     this.state = {
       opportunities: [],
       hasMoreItems: true,
-      canAddOpportunity: this.userService.getUserType() === UserType.STAFF,
+      canAddOpportunity: this.appUser.getUserType() === UserType.STAFF,
       showAddModal: false,
       showAddSpinner: false,
     };
@@ -113,7 +113,7 @@ export class OpportunityFeed
 
     this.setState({ showAddSpinner: true });
     this.opportunityService.feedManageOpportunity({
-      creator_id: this.userService.getUserID(),
+      creator_id: this.appUser.getUserID(),
       title,
       contents,
       key: "add",

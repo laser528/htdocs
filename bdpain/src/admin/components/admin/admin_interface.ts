@@ -1,8 +1,6 @@
-import { MouseEvent } from "react";
+import { FormEvent, MouseEvent } from "react";
 
-export interface AdminProps {
-  view?: AdminView;
-}
+export interface AdminProps {}
 
 export enum AdminView {
   INFO,
@@ -11,8 +9,17 @@ export enum AdminView {
   USERS,
 }
 
+interface Info {
+  users: number;
+  sessions: number;
+  opportunities: number;
+  views: number;
+}
+
 export interface AdminState {
   view: AdminView;
+  info?: Info;
+  showSpinner: boolean;
 }
 
 export interface AdminController {
@@ -20,4 +27,7 @@ export interface AdminController {
   onImpersonationClick: (event: MouseEvent) => void;
   onForceLogoutClick: (event: MouseEvent) => void;
   onModifyUsersClick: (event: MouseEvent) => void;
+
+  onImpersonationSubmit: (event: FormEvent) => void;
+  onForceLogoutSubmit: (event: FormEvent) => void;
 }

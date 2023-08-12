@@ -14,10 +14,5 @@ export class ProfileAbout
 
   constructor(props: ProfileAboutProps) {
     super(props);
-    this.state = { about: props.about };
   }
-
-  readonly aboutFormat = (about: string) => {
-    return about.slice(0, 1000);
-  };
 }

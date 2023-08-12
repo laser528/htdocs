@@ -1,16 +1,5 @@
-export interface StatsProps {
-  onError?: (error: string) => {};
-}
+export interface StatsProps {}
 
-interface Info {
-  users: number;
-  sessions: number;
-  opportunities: number;
-  views: number;
-}
-
-export interface StatsState {
-  info?: Info;
-}
+export interface StatsState {}
 
 export interface StatsController {}

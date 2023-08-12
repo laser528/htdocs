@@ -6,8 +6,8 @@ import {
   UserFormController,
   UserFormState,
 } from "./user_form_interface";
-import { UserService } from "../../../contrib/user/services/user_service/user_service";
-import { UserType } from "../../../contrib/user/models/user";
+import { UserService } from "../../../contrib/services/user/user_service";
+import { UserType } from "../../../contrib/services/user/lib";
 
 export class UserForm
   extends Component<UserFormProps, UserFormState>
@@ -32,9 +32,7 @@ export class UserForm
   }
 
   componentDidMount(): void {
-    this.unsubscribe = this.userService.onUserModifySuccess(
-      this.onUserResponse
-    );
+    this.unsubscribe = this.userService.onUserSuccess(this.onUserResponse);
   }
 
   componentWillUnmount(): void {
@@ -79,12 +77,7 @@ export class UserForm
     const email = sanitize(formData.get("email")?.toString() ?? "");
     const password = sanitize(formData.get("password")?.toString() ?? "");
 
-    if (this.getPasswordStrength(password).variant === "WEAK") {
-      this.props.onError?.("Your password must be longer!");
-      return;
-    }
-
-    this.userService.feedModifyRequest({
+    this.userService.feedUser({
       username,
       email,
       password,
@@ -93,7 +86,8 @@ export class UserForm
     this.setState({ showSpinner: true });
   };
 
-  private getPasswordStrength(password: string) {
+  get passwordStrength() {
+    const password = this.state.password;
     let strength = "WEAK";
     let className = "danger";
 
@@ -110,9 +104,5 @@ export class UserForm
       variant: strength,
       class: className,
     };
-  }
-
-  get passwordStrength() {
-    return this.getPasswordStrength(this.state.password);
   }
 }

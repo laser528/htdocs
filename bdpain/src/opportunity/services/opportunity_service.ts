@@ -1,6 +1,5 @@
 import { NetworkService } from "../../contrib/services/network/network_service";
 import { Subject, Observable, share, switchMap, map } from "rxjs";
-import { UserService } from "../../contrib/user/services/user_service/user_service";
 
 interface OpportunityManageRequest {
   opportunity_id?: string;
@@ -18,7 +17,6 @@ interface OpportunityRequest {
 }
 
 export class OpportunityService {
-  private readonly userService = UserService.getInstance();
   private readonly networkService = NetworkService.getInstance();
   private readonly request$ = new Subject<OpportunityRequest>();
   private readonly response$: Observable<object>;
@@ -32,18 +30,12 @@ export class OpportunityService {
       switchMap((request) => {
         if (request.opportunity_id) {
           return this.networkService.fetch("opportunity/get_opportunity.php", {
-            payload: {
-              opportunity_id: request.opportunity_id,
-            },
-            user_id: this.userService.getId(),
+            opportunity_id: request.opportunity_id,
           });
         }
 
         return this.networkService.fetch("opportunity/get_opportunity.php", {
-          payload: {
-            after: request.after,
-          },
-          user_id: this.userService.getId(),
+          after: request.after,
         });
       }),
       share()
@@ -54,20 +46,18 @@ export class OpportunityService {
         if (!request.opportunity_id) {
           return this.networkService.fetch(
             "opportunity/create_opportunity.php",
-            { payload: request, user_id: this.userService.getId() }
+            request
           );
         }
 
         const path = request.destroy
           ? "remove_opportunity.php"
           : "update_opportunity.php";
-        return this.networkService
-          .fetch(`opportunity/${path}`, { payload: request })
-          .pipe(
-            map((response) => {
-              return { ...response, key: request.key };
-            })
-          );
+        return this.networkService.fetch(`opportunity/${path}`, request).pipe(
+          map((response) => {
+            return { ...response, key: request.key };
+          })
+        );
       }),
       share()
     );

@@ -13,7 +13,7 @@ import { Briefcase, Search, PersonBadge } from "react-bootstrap-icons";
 import "./navbar.scss";
 import { NavbarController, NavbarProps, NavbarState } from "./navbar_interface";
 import { LinkContainer } from "react-router-bootstrap";
-import { UserType } from "../../../contrib/user/models/user";
+import { UserType } from "../../../contrib/services/user/lib";
 
 export function template(
   this: NavbarController,

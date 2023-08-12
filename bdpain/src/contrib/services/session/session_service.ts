@@ -1,7 +1,6 @@
 import { NetworkService } from "../../../contrib/services/network/network_service";
 import { Subject, Observable, share, switchMap, map } from "rxjs";
 import { SessionType } from "./lib";
-import { UserService } from "../../user/services/user_service/user_service";
 
 interface SessionRequest {
   view: SessionType;
@@ -21,7 +20,6 @@ interface SessionCountRequest {
 
 export class SessionService {
   private readonly networkService = NetworkService.getInstance();
-  private readonly userService = UserService.getInstance();
   private readonly requestCreate$ = new Subject<SessionRequest>();
   private readonly responseCreate$: Observable<object>;
 
@@ -34,16 +32,9 @@ export class SessionService {
 
   private constructor() {
     this.responseCreate$ = this.requestCreate$.pipe(
-      switchMap((request) => {
-        const payload = {
-          view: request.view,
-          viewed_id: request.viewed_id || null,
-        };
-        return this.networkService.fetch("session/create_session.php", {
-          payload,
-          user_id: this.userService.getId(),
-        });
-      }),
+      switchMap((request) =>
+        this.networkService.fetch("session/create_session.php", request)
+      ),
       share()
     );
 
@@ -53,10 +44,7 @@ export class SessionService {
           ? "remove_session.php"
           : "update_session.php";
         return this.networkService.fetch(`session/${path}`, {
-          payload: {
-            session_id: request.session_id,
-          },
-          user_id: this.userService.getId(),
+          session_id: request.session_id,
         });
       }),
       share()
@@ -65,17 +53,16 @@ export class SessionService {
     this.responseCount$ = this.requestCount$.pipe(
       switchMap((request) =>
         this.networkService
-          .fetch("session/count_session.php", {
-            payload:
-              request.type === "profile"
-                ? {
-                    user_id: request.id,
-                  }
-                : {
-                    opportunity_id: request.id,
-                  },
-            user_id: this.userService.getId(),
-          })
+          .fetch(
+            "session/count_session.php",
+            request.type === "profile"
+              ? {
+                  user_id: request.id,
+                }
+              : {
+                  opportunity_id: request.id,
+                }
+          )
           .pipe(
             map((response) => {
               return { ...response, key: request.type };
