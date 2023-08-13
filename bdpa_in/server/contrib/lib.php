@@ -39,4 +39,10 @@ function bdpa_fetch($endpoint, $method = "GET", $payload = null) {
 
     return $response;
 }
+
+/** Used at the top of files to set php headers. */
+function set_headers() {
+    header('Content-type: application/json');
+    header("Access-Control-Allow-Origin: *");
+}
 ?>
