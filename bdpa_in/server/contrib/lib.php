@@ -45,4 +45,22 @@ function set_headers() {
     header('Content-type: application/json');
     header("Access-Control-Allow-Origin: *");
 }
+
+/** When true all responses from server will force user to logout. */
+function force_logout($user_id) {
+    if (!isset($user_id)) return false;
+    
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("SELECT COUNT(*) as `count` FROM `force_logout` WHERE user_id=?");
+    $stmt->bind_param("s", $user_id);
+    $stmt->execute();
+    $stmt_result = $stmt->get_result();
+    $stmt->close();
+    return $stmt_result->fetch_object()->count == 0 ? false : true;
+}
+
+/** Outputs to the browser, logout the user. */
+function force_logout_response() {
+    echo json_encode(array("logout" => true));
+}
 ?>
