@@ -5,7 +5,9 @@ require_once "rate_limit.php";
 
 /** Gets a new Mysqli Instance. */
 function get_mysql_connection() {
-    return new mysqli($_ENV["DB_HOST"], $_ENV["DB_USER"], $_ENV["DB_PASSWORD"], $_ENV["DB_NAME"]);
+    $conn = new mysqli($_ENV["DB_HOST"], $_ENV["DB_USER"], $_ENV["DB_PASSWORD"], $_ENV["DB_NAME"]);
+    $conn->set_charset("utf8mb4");
+    return $conn;
 }
 
 /** Make a call to BDPA API. */
@@ -24,7 +26,7 @@ function bdpa_fetch($endpoint, $method = "GET", $payload = null) {
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
     );
-    
+
     if ($payload) $opt[CURLOPT_POSTFIELDS] = json_encode($payload);
 
     $ch = curl_init();
