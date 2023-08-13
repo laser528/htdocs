@@ -12,4 +12,10 @@ if($file_open) {
     }
     fclose($file_open);
 }
+
+# Encryption constants
+const SALT_BYTES = 16;
+const KEY_LENGTH_BYTES = 64;
+const KEY_GEN_ITERATIONS = 100000;
+const KEY_ALGORITHM = "sha256";
 ?>
