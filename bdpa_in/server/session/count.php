@@ -1,6 +1,11 @@
 <?php
 /**
  * Get active viewer session counts for opportunities or profiles.
+ * The payload should be of form.
+ * {
+ *      type: user|opportunity
+ *      id: user/opportunity_id
+ * } 
  */
 require_once "../contrib/lib.php";
 
