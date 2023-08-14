@@ -66,4 +66,30 @@ function create_user($user_data) {
     $stmt->close();
     return "success";
 }
+
+function get_user($name_or_id) {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("SELECT * FROM `users` WHERE username=? or user_id=?");
+    $stmt->bind_param("ss", $name_or_id, $name_or_id);
+    $stmt->execute();
+    $stmt_result = $stmt->get_result();
+    $row = $stmt_result->fetch_object();
+    $stmt->close();
+    return $row;
+}
+
+function get_users_feed() {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("SELECT * FROM `users` ORDER BY updatedAt DESC");
+    $stmt->execute();
+    $stmt_result = $stmt->get_result();
+
+    $rows = array();
+    while($row = $stmt_result->fetch_object()) {
+        $rows[] = $row;
+    }
+    $stmt->close();
+
+    return $rows;
+}
 ?>
