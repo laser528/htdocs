@@ -67,10 +67,10 @@ function create_user($user_data) {
     return "success";
 }
 
-function get_user($name_or_id) {
+function get_user($name_or_id_or_email) {
     $conn = get_mysql_connection();
-    $stmt = $conn->prepare("SELECT * FROM `users` WHERE username=? or user_id=?");
-    $stmt->bind_param("ss", $name_or_id, $name_or_id);
+    $stmt = $conn->prepare("SELECT * FROM `users` WHERE username=? or user_id=? or email=?");
+    $stmt->bind_param("sss", $name_or_id_or_email, $name_or_id_or_email, $name_or_id_or_email);
     $stmt->execute();
     $stmt_result = $stmt->get_result();
     $row = $stmt_result->fetch_object();
