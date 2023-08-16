@@ -30,7 +30,7 @@ export class AppService {
     this.request$.next({});
   }
 
-  onSyncSuccess(callback: (response: any) => void) {
+  onSyncResponse(callback: (response: any) => void) {
     const subscriber = this.response$.subscribe(callback);
     return () => {
       subscriber.unsubscribe();
