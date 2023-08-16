@@ -9,6 +9,7 @@
  */
 require_once "../contrib/lib.php";
 require_once "../contrib/users.php";
+require_once "lib.php";
 
 set_headers();
 
