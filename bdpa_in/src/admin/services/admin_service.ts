@@ -1,4 +1,4 @@
-import { UserType } from "../../contrib/lib";
+import { SessionView, UserType } from "../../contrib/lib";
 import { NetworkService } from "../../contrib/services/network_service";
 import { Subject, Observable, share, switchMap } from "rxjs";
 
@@ -24,6 +24,11 @@ interface PromoteRequest {
   type: UserType;
 }
 
+interface SessionRequest {
+  // When empty will create a new session.
+  session_id?: string;
+}
+
 export class AdminService {
   private readonly networkService = NetworkService.getInstance();
   private readonly addUserRequest$ = new Subject<AddUserRequest>();
@@ -41,6 +46,9 @@ export class AdminService {
 
   private readonly promoteRequest$ = new Subject<PromoteRequest>();
   private readonly promoteResponse$: Observable<object>;
+
+  private readonly sessionRequest$ = new Subject<SessionRequest>();
+  private readonly sessionResponse$: Observable<object>;
 
   private static instance: AdminService;
 
@@ -79,6 +87,18 @@ export class AdminService {
       ),
       share()
     );
+
+    this.sessionResponse$ = this.sessionRequest$.pipe(
+      switchMap((request) => {
+        return !!request.session_id
+          ? this.networkService.fetch("session/update.php", request)
+          : this.networkService.fetch("session/create.php", {
+              view: SessionView.ADMIN,
+              viewed_id: null,
+            });
+      }),
+      share()
+    );
   }
 
   public static getInstance(): AdminService {
@@ -107,6 +127,10 @@ export class AdminService {
 
   feedPromote(request: PromoteRequest) {
     this.promoteRequest$.next(request);
+  }
+
+  feedSession(request: SessionRequest) {
+    this.sessionRequest$.next(request);
   }
 
   onAddUserResponse(callback: (response: any) => void) {
@@ -139,6 +163,13 @@ export class AdminService {
 
   onPromoteResponse(callback: (response: any) => void) {
     const subscriber = this.promoteResponse$.subscribe(callback);
+    return () => {
+      subscriber.unsubscribe();
+    };
+  }
+
+  onSessionResponse(callback: (response: any) => void) {
+    const subscriber = this.sessionResponse$.subscribe(callback);
     return () => {
       subscriber.unsubscribe();
     };

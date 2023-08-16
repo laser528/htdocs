@@ -17,3 +17,11 @@ export interface User {
   updatedAt: string;
   url: string;
 }
+
+export enum SessionView {
+  HOME = "home",
+  ADMIN = "admin",
+  AUTH = "auth",
+  PROFILE = "profile",
+  OPPORTUNITY = "opportunity",
+}
