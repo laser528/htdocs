@@ -164,6 +164,18 @@ function modify_profile_user_section($user_id, $type, $section) {
     return "success";
 }
 
+function modify_profile_url($user_id, $url) {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("UPDATE `users` SET url=? WHERE user_id=?");
+    if (!$stmt) return $conn->error;
+
+    $stmt->bind_param("ss", $url, $user_id);
+    if(!$stmt->execute()) return $stmt->error;
+    $stmt->close();
+
+    return "success";
+}
+
 function get_connections($user_id) {
     $conn = get_mysql_connection();
     $stmt = $conn->prepare("SELECT connection_id FROM `connections` WHERE user_id=?");
