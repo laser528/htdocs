@@ -1,18 +1,23 @@
 import { SessionView, UserType } from "../../contrib/lib";
+import { AppUserService } from "../../contrib/services/app_user_service";
 import { NetworkService } from "../../contrib/services/network_service";
-import { Subject, Observable, share, switchMap } from "rxjs";
+import {
+  LocalStorage,
+  SessionStorage,
+} from "../../contrib/services/storage_service";
+import { Observable, Subject, of, share, switchMap } from "rxjs";
 
 interface RegisterRequest {
   username: string;
   email: string;
   password: string;
   type: UserType;
-  rememberMe: boolean;
 }
 
 interface LoginRequest {
   username: string;
   password: string;
+  rememberMe: boolean;
 }
 
 interface LogoutRequest {
@@ -34,6 +39,7 @@ interface SessionRequest {
 }
 
 export class AuthService {
+  private readonly appUserService = AppUserService.getInstance();
   private readonly networkService = NetworkService.getInstance();
   private readonly registerRequest$ = new Subject<RegisterRequest>();
   private readonly registerResponse$: Observable<object>;
@@ -55,8 +61,14 @@ export class AuthService {
   private readonly sessionResponse$: Observable<object>;
 
   private static instance: AuthService;
+  private failedAttempts = 0;
 
   private constructor() {
+    document.addEventListener("forceLogout", () => {
+      this.logout();
+      window.location.href = "/";
+    });
+
     this.registerResponse$ = this.registerRequest$.pipe(
       switchMap((request) =>
         this.networkService.fetch("auth/register.php", request)
@@ -66,7 +78,27 @@ export class AuthService {
 
     this.loginResponse$ = this.loginRequest$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("auth/login.php", request)
+        this.networkService.fetch("auth/login.php", request).pipe(
+          switchMap((response: any) => {
+            if (!response.success) {
+              this.failedAttempts++;
+              if (this.failedAttempts === 3) {
+                this.failedAttempts = 0;
+                LocalStorage.setItem("loginTimer", Date.now().toString());
+              }
+              return of(response);
+            }
+
+            this.appUserService.setUser(response.user);
+
+            if (request.rememberMe) {
+              LocalStorage.setItem("user", JSON.stringify(response.user));
+            } else {
+              SessionStorage.setItem("user", JSON.stringify(response.user));
+            }
+            return of(response);
+          })
+        )
       ),
       share()
     );
@@ -177,5 +209,39 @@ export class AuthService {
     return () => {
       subscriber.unsubscribe();
     };
+  }
+
+  isLoggedIn() {
+    return !!this.appUserService.getUser();
+  }
+
+  logout() {
+    LocalStorage.removeItem("user");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("impersonatingUser");
+    LocalStorage.removeItem("loginTimer");
+    this.failedAttempts = 0;
+    this.appUserService.removeUser();
+    this.appUserService.removeImpersonatingUser();
+  }
+
+  private get timer() {
+    return parseInt(LocalStorage.getItem("loginTimer") ?? "0");
+  }
+
+  canLogin() {
+    if (!this.timer) {
+      return { canLogin: true, failedAttempts: this.failedAttempts };
+    } else {
+      const waitTimeInMinutes = (this.timer + 3600000 - Date.now()) / 1000 / 60;
+      if (waitTimeInMinutes <= 0) {
+        LocalStorage.removeItem("loginTimer");
+        return { canLogin: true, failedAttempts: 0 };
+      }
+      return {
+        canLogin: false,
+        howLongToWaitInMinutes: waitTimeInMinutes,
+      };
+    }
   }
 }
