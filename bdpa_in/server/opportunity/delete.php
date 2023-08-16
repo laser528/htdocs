@@ -16,6 +16,11 @@ $data = json_decode($json_data);
 
 $payload = $data->payload;
 
+if(force_logout($data->user_id)) {
+    force_logout_response();
+    exit();
+}
+
 $result = bdpa_fetch("opportunities/{$payload->opportunity_id}", "DELETE");
 $response = json_decode($result);
 if(isset($response->error)) {

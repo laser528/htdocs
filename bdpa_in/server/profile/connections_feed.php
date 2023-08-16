@@ -17,10 +17,10 @@ $data = json_decode($json_data);
 
 $payload = $data->payload;
 
-$payload = json_decode(json_encode(array(
-    "profile_id" => "",
-    "user_id" => "",
-)));
+if(force_logout($data->user_id)) {
+    force_logout_response();
+    exit();
+}
 
 $connections_profile = get_connections_bfs($payload->profile_id, 3);
 $connections_user = get_connections_bfs($payload->user_id, 3);

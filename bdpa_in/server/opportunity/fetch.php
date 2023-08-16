@@ -16,6 +16,11 @@ $data = json_decode($json_data);
 
 $payload = $data->payload;
 
+if(force_logout($data->user_id)) {
+    force_logout_response();
+    exit();
+}
+
 $conn = get_mysql_connection();
 if(isset($payload->opportunity_id)) {
     $stmt = $conn->prepare("SELECT * FROM `opportunities` WHERE opportunity_id=?");

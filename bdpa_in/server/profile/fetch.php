@@ -17,6 +17,12 @@ $json_data = file_get_contents('php://input');
 $data = json_decode($json_data);
 
 $payload = $data->payload;
+
+if(force_logout($data->user_id)) {
+    force_logout_response();
+    exit();
+}
+
 $user = get_user($payload->url);
 
 if(!isset($user)) {

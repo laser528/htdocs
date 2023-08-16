@@ -18,10 +18,12 @@ $json_data = file_get_contents('php://input');
 $data = json_decode($json_data);
 
 $payload = $data->payload;
-$payload = json_decode(json_encode(array(
-    "opportunity_id" => "64ce6836f3e407b7a5566975",
-    "views" => "increment",
-)));
+
+if(force_logout($data->user_id)) {
+    force_logout_response();
+    exit();
+}
+
 $opportunity_id = $payload->opportunity_id;
 unset($payload->opportunity_id);
 
