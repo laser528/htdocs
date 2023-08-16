@@ -27,6 +27,8 @@ interface PromoteRequest {
 interface SessionRequest {
   // When empty will create a new session.
   session_id?: string;
+  // Destory
+  destroy?: boolean;
 }
 
 export class AdminService {
@@ -90,12 +92,16 @@ export class AdminService {
 
     this.sessionResponse$ = this.sessionRequest$.pipe(
       switchMap((request) => {
-        return !!request.session_id
-          ? this.networkService.fetch("session/update.php", request)
-          : this.networkService.fetch("session/create.php", {
-              view: SessionView.ADMIN,
-              viewed_id: null,
-            });
+        if (request.session_id) {
+          return !!request.destroy
+            ? this.networkService.fetch("session/delete.php", request)
+            : this.networkService.fetch("session/update.php", request);
+        }
+
+        return this.networkService.fetch("session/create.php", {
+          view: SessionView.ADMIN,
+          viewed_id: null,
+        });
       }),
       share()
     );
