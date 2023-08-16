@@ -107,5 +107,6 @@ foreach($opportunities as $opportunity) {
 }
 
 // END
-echo json_encode(array("success" => true));
+$date = date('Y-m-d H:i:s');
+echo json_encode(array("success" => "Last updated at {$date}"));
 ?>
