@@ -7,9 +7,9 @@ import Navbar from "../navbar/navbar";
 import Container from "react-bootstrap/Container";
 import { NotFound } from "../not_found/not_found";
 import { Home } from "../../../home/components/home/home";
-// import Auth from "../../../auth/components/auth/auth";
-// import { AuthType } from "../../../auth/components/auth/auth_interface";
-// import ProtectedRoute from "../protected_route/protected_route";
+import Auth from "../../../auth/components/auth/auth";
+import { AuthType } from "../../../auth/components/auth/auth_interface";
+import ProtectedRoute from "../protected_route/protected_route";
 // import { UserType } from "../../../contrib/services/user/lib";
 // import { Admin } from "../../../admin/components/admin/admin";
 // import Opportunity from "../../../opportunity/components/opportunity/opportunity";
@@ -25,7 +25,6 @@ export function template(
       <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/*
         <Route
           path="/auth/login"
           element={
@@ -78,6 +77,8 @@ export function template(
             </ProtectedRoute>
           }
         />
+        {/*
+        
         <Route
           path="/admin"
           element={

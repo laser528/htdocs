@@ -28,7 +28,7 @@ export class Home
 
     // Refresh Session every thirty seconds.
     this.homeService.feedSession({});
-    this.clearSessionInterval = window.setInterval(async () => {
+    this.clearSessionInterval = window.setInterval(() => {
       this.homeService.feedSession({ session_id: this.state.session_id });
     }, 30000);
 

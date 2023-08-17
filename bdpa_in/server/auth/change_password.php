@@ -39,7 +39,7 @@ if(!isset($row->user_id)) {
     exit();
 }
 
-$credentials = generate_salt_and_key($row->password);
+$credentials = generate_salt_and_key($payload->password);
 
 $result = bdpa_fetch("users/{$row->user_id}", "PATCH", array(
         "salt" => $credentials->salt,
