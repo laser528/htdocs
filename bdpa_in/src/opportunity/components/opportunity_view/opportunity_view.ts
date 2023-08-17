@@ -149,6 +149,11 @@ export class OpportunityView
     this.unsubscribeDeleteResponse();
     this.unsubscribeModifyResponse();
     this.unsubscribeSessionResponse();
+    this.opportunityService.feedSession({
+      session_id: this.state.session_id,
+      opportunity_id: this.props.id,
+      destroy: true,
+    });
   };
 
   readonly onEditButtonClick = (event: MouseEvent) => {

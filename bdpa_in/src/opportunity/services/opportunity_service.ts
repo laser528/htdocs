@@ -65,10 +65,28 @@ export class OpportunityService {
               this.feedSession({
                 opportunity_id: response.opportunity.opportunity_id,
               });
-              return this.networkService.fetch("opportunity/modify.php", {
-                opportunity_id: response.opportunity.opportunity_id,
-                views: "increment",
-              });
+              return this.networkService
+                .fetch("opportunity/modify.php", {
+                  opportunity_id: response.opportunity.opportunity_id,
+                  views: "increment",
+                })
+                .pipe(
+                  switchMap(async (response) => {
+                    if (response.opportunity) {
+                      const activeViewerResponse = await firstValueFrom(
+                        this.networkService.fetch("session/count.php", {
+                          type: "opportunity",
+                          id: response.opportunity.opportunity_id,
+                        })
+                      );
+
+                      if (activeViewerResponse.active)
+                        response.opportunity.activeViewers =
+                          activeViewerResponse.active;
+                    }
+                    return response;
+                  })
+                );
             }
             return of(response);
           })
@@ -100,12 +118,16 @@ export class OpportunityService {
 
     this.sessionResponse$ = this.sessionRequest$.pipe(
       switchMap((request) => {
-        return !!request.session_id
-          ? this.networkService.fetch("session/update.php", request)
-          : this.networkService.fetch("session/create.php", {
-              view: SessionView.OPPORTUNITY,
-              viewed_id: request.opportunity_id,
-            });
+        if (!!request.session_id) {
+          return !!request.destroy
+            ? this.networkService.fetch("session/delete.php", request)
+            : this.networkService.fetch("session/update.php", request);
+        }
+
+        return this.networkService.fetch("session/create.php", {
+          view: SessionView.OPPORTUNITY,
+          viewed_id: request.opportunity_id,
+        });
       }),
       share()
     );
