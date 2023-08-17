@@ -13,7 +13,7 @@ import ProtectedRoute from "../protected_route/protected_route";
 import { UserType } from "../../../contrib/lib";
 import { Admin } from "../../../admin/components/admin/admin";
 import Opportunity from "../../../opportunity/components/opportunity/opportunity";
-// import { ProfileView } from "../../../profile/components/profile_view/profile_view";
+import Profile from "../../../profile/components/profile/profile";
 
 export function template(
   this: AppController,
@@ -110,35 +110,14 @@ export function template(
             </ProtectedRoute>
           }
         />
-        {/*
-        <Route
-          path="/opportunities"
-          element={
-            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
-              <Container className="content-container">
-                <Opportunity />
-              </Container>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/opportunities/:id"
-          element={
-            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
-              <Container className="content-container">
-                <Opportunity />
-              </Container>
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/in/:id"
           element={
             <Container className="content-container">
-              <ProfileView />
+              <Profile />
             </Container>
           }
-        /> */}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <footer className="footer bg-body-tertiary">

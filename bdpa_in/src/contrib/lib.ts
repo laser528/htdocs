@@ -37,7 +37,7 @@ export interface UserProfileSection {
   location: string;
   description: string;
   startedAt: number;
-  endedAt: number | null;
+  endedAt?: number;
 }
 
 export interface Opportunity {

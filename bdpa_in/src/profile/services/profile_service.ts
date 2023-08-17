@@ -113,7 +113,7 @@ export class ProfileService {
                 response.profile.activeViewers = activeViewerResponse.active;
               }
             }
-            return of(response);
+            return response;
           })
         )
       ),
@@ -175,12 +175,16 @@ export class ProfileService {
 
     this.sessionResponse$ = this.sessionRequest$.pipe(
       switchMap((request) => {
-        return !!request.session_id
-          ? this.networkService.fetch("session/update.php", request)
-          : this.networkService.fetch("session/create.php", {
-              view: SessionView.PROFILE,
-              viewed_id: request.profile_id,
-            });
+        if (!!request.session_id) {
+          return !!request.destroy
+            ? this.networkService.fetch("session/delete.php", request)
+            : this.networkService.fetch("session/update.php", request);
+        }
+
+        return this.networkService.fetch("session/create.php", {
+          view: SessionView.PROFILE,
+          viewed_id: request.profile_id,
+        });
       }),
       share()
     );
