@@ -48,7 +48,7 @@ export class AdminService {
   private readonly infoRequest$ = new Subject<InfoRequest>();
   private readonly infoResponse$: Observable<object>;
 
-  private readonly promoteRequest$ = new Subject<PromoteRequest>();
+  private readonly promoteRequest$ = new Subject<PromoteRequest | undefined>();
   private readonly promoteResponse$: Observable<object>;
 
   private readonly sessionRequest$ = new Subject<SessionRequest>();
@@ -141,7 +141,7 @@ export class AdminService {
     this.infoRequest$.next({});
   }
 
-  feedPromote(request: PromoteRequest) {
+  feedPromote(request?: PromoteRequest) {
     this.promoteRequest$.next(request);
   }
 

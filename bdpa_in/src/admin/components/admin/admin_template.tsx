@@ -14,7 +14,7 @@ import "./admin.scss";
 import { Stats } from "../stats/stats";
 import { Impersonation } from "../impersonation/impersonation";
 import { ForceLogout } from "../force_logout/force_logout";
-//import { ModifyUsers } from "../promote_user/modify_users";
+import { ModifyUsers } from "../modify_users/modify_users";
 
 export function modify_users_template(
   controller: AdminController,
@@ -69,6 +69,7 @@ export function template(
             {state.view === AdminView.INFO && <Stats />}
             {state.view === AdminView.IMPERSONATION && <Impersonation />}
             {state.view === AdminView.LOGOUT && <ForceLogout />}
+            {state.view === AdminView.USERS && <ModifyUsers />}
           </Col>
         </Col>
       </Row>

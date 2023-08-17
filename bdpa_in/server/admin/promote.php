@@ -18,8 +18,8 @@ $data = json_decode($json_data);
 $payload = $data->payload;
 
 // When nothing is sent, output the feed of users.
-if(!isset($payload)) {
-    echo json_encode(get_users_feed());
+if(!isset($payload->name_or_id)) {
+    echo json_encode(array("success" => true, "users" => get_users_feed()));
     exit();
 }
 
