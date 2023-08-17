@@ -1,0 +1,33 @@
+.navbar {
+  z-index: 1;
+
+  .navLockup {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+
+    .image {
+      border-radius: 50%;
+      display: block;
+      height: 1.5rem;
+    }
+
+    .icon {
+      display: block;
+      font-size: 1.5rem;
+    }
+
+    .text {
+      display: block;
+    }
+  }
+
+  .glow-button {
+    --box-shadow-color: black;
+    box-shadow: 0 0 30px var(--box-shadow-color);
+  }
+
+  .btn-danger.glow-button {
+    --box-shadow-color: #dc3545;
+  }
+}
