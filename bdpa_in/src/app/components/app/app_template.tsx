@@ -12,7 +12,7 @@ import { AuthType } from "../../../auth/components/auth/auth_interface";
 import ProtectedRoute from "../protected_route/protected_route";
 import { UserType } from "../../../contrib/lib";
 import { Admin } from "../../../admin/components/admin/admin";
-// import Opportunity from "../../../opportunity/components/opportunity/opportunity";
+import Opportunity from "../../../opportunity/components/opportunity/opportunity";
 // import { ProfileView } from "../../../profile/components/profile_view/profile_view";
 
 export function template(
@@ -87,6 +87,26 @@ export function template(
               redirectPath={`/in/${this.url}`}
             >
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/opportunities"
+          element={
+            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              <Container className="content-container">
+                <Opportunity />
+              </Container>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/opportunities/:id"
+          element={
+            <ProtectedRoute isAllowed={this.isLoggedIn} redirectPath={`/`}>
+              <Container className="content-container">
+                <Opportunity />
+              </Container>
             </ProtectedRoute>
           }
         />

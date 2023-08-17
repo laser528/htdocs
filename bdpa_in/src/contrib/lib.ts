@@ -39,3 +39,14 @@ export interface UserProfileSection {
   startedAt: number;
   endedAt: number | null;
 }
+
+export interface Opportunity {
+  opportunity_id: string;
+  creator_id: string;
+  title: string;
+  contents: string;
+  views: number;
+  createdAt: number;
+  updatedAt: number;
+  activeViewers?: number;
+}

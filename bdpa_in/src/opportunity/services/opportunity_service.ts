@@ -16,14 +16,13 @@ interface FetchRequest {
 interface AddRequest {
   creator_id: string;
   title: string;
-  content: string;
+  contents: string;
 }
 
 interface ModifyRequest {
   opportunity_id: string;
-  creator_id: string;
   title: string;
-  content: string;
+  contents: string;
 }
 
 interface DeleteRequest {
@@ -61,38 +60,15 @@ export class OpportunityService {
     this.fetchResponse$ = this.fetchRequest$.pipe(
       switchMap((request) =>
         this.networkService.fetch("opportunity/fetch.php", request).pipe(
-          switchMap(async (response) => {
-            if (response.success) {
-              if (response.opportunities) {
-                const mergedOpportunities = response.opportunity.map(
-                  async (opportunity: any) => {
-                    const activeViewerResponse = await firstValueFrom(
-                      this.networkService.fetch("session/count.php", {
-                        type: "opportunity",
-                        id: opportunity.opportunity_id,
-                      })
-                    );
-                    if (activeViewerResponse.success) {
-                      opportunity.activeViewers = activeViewerResponse.active;
-                    }
-                    return opportunity;
-                  }
-                );
-                response.opportunites = mergedOpportunities;
-              }
-
-              if (response.opportunity) {
-                const activeViewerResponse = await firstValueFrom(
-                  this.networkService.fetch("session/count.php", {
-                    type: "opportunity",
-                    id: response.opportunity.opportunity_id,
-                  })
-                );
-                if (activeViewerResponse.success) {
-                  response.opportunity.activeViewers =
-                    activeViewerResponse.active;
-                }
-              }
+          switchMap((response) => {
+            if (response.opportunity) {
+              this.feedSession({
+                opportunity_id: response.opportunity.opportunity_id,
+              });
+              return this.networkService.fetch("opportunity/modify.php", {
+                opportunity_id: response.opportunity.opportunity_id,
+                views: "increment",
+              });
             }
             return of(response);
           })

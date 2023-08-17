@@ -47,12 +47,12 @@ export class ModifyUsers
 
     this.adminService.feedPromote();
 
-    document.addEventListener("beforeunload", this.cleanup);
+    window.addEventListener("beforeunload", this.cleanup);
   }
 
   componentWillUnmount(): void {
     this.cleanup();
-    document.removeEventListener("beforeunload", this.cleanup);
+    window.removeEventListener("beforeunload", this.cleanup);
   }
 
   private readonly cleanup = () => {

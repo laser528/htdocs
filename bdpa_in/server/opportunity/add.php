@@ -5,7 +5,7 @@
  * {
  *      creator_id: <user_id>
  *      title: <title>
- *      content: <content>
+ *      contents: <contents>
  * }
  */
 require_once "../contrib/lib.php";

@@ -5,7 +5,7 @@
  * {
  *      opportunity_id: <opportunity_id>
  *      title: <title>
- *      contents: <content>
+ *      contents: <contents>
  *      views: <increment>
  * }
  */

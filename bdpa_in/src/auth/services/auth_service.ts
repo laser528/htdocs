@@ -5,7 +5,14 @@ import {
   LocalStorage,
   SessionStorage,
 } from "../../contrib/services/storage_service";
-import { Observable, Subject, of, share, switchMap } from "rxjs";
+import {
+  Observable,
+  Subject,
+  firstValueFrom,
+  of,
+  share,
+  switchMap,
+} from "rxjs";
 
 interface RegisterRequest {
   username: string;
@@ -66,8 +73,18 @@ export class AuthService {
 
   private constructor() {
     document.addEventListener("forceLogout", () => {
-      this.logout();
-      window.location.href = "/";
+      firstValueFrom(
+        this.networkService.fetch("auth/logout.php", {
+          user_id: this.appUserService.getUserID(),
+        })
+      ).then((response) => {
+        if (response.success) {
+          this.logout();
+          window.location.href = "/";
+        } else {
+          alert(response.error);
+        }
+      });
     });
 
     this.registerResponse$ = this.registerRequest$.pipe(
