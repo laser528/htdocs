@@ -1,4 +1,5 @@
 import React from "react";
+import BDPA from "../../../static/assets/BDPA.png";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -25,11 +26,7 @@ export function template(
         <Col className="col-3"></Col>
         <LinkContainer to="/">
           <Nav.Link>
-            <Image
-              src={require("../../../static/assets/BDPA.png")}
-              className="me-2"
-              style={{ height: 30 }}
-            ></Image>
+            <Image src={BDPA} className="me-2" style={{ height: 30 }}></Image>
             <Navbar.Brand className="me-3">BDPAIn</Navbar.Brand>
           </Nav.Link>
         </LinkContainer>

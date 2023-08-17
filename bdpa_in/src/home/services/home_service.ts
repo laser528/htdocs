@@ -19,7 +19,7 @@ export class HomeService {
   private constructor() {
     this.sessionResponse$ = this.sessionRequest$.pipe(
       switchMap((request) => {
-        if (request.session_id) {
+        if (!!request.session_id) {
           return !!request.destroy
             ? this.networkService.fetch("session/delete.php", request)
             : this.networkService.fetch("session/update.php", request);

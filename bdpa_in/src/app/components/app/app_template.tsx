@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "../navbar/navbar";
 import Container from "react-bootstrap/Container";
 import { NotFound } from "../not_found/not_found";
-// import { Landing } from "../../../landing/components/landing/landing";
+import { Home } from "../../../home/components/home/home";
 // import Auth from "../../../auth/components/auth/auth";
 // import { AuthType } from "../../../auth/components/auth/auth_interface";
 // import ProtectedRoute from "../protected_route/protected_route";
@@ -24,7 +24,8 @@ export function template(
     <main id="app" data-bs-theme={state.theme} className="app">
       <Navbar></Navbar>
       <Routes>
-        {/* <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Home />} />
+        {/*
         <Route
           path="/auth/login"
           element={
