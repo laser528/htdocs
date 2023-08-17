@@ -1,9 +1,8 @@
 <?php
 /**
- * Alters a profiles header
+ * Alters a profiles url
  * {
  *      url: <user_id>
- *      cover_photo: <image file>
  * }
  */
 require_once "../contrib/lib.php";
@@ -26,8 +25,6 @@ if ($status != "success") {
     echo json_encode(array("error" => $status));
     exit();
 }
-
-// Add code for cover photo modification.
 
 echo json_encode(array("success" => true));
 ?>

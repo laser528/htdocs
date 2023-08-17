@@ -1,6 +1,13 @@
 import { SessionView } from "../../contrib/lib";
 import { NetworkService } from "../../contrib/services/network_service";
-import { Observable, Subject, share, switchMap } from "rxjs";
+import {
+  Observable,
+  Subject,
+  of,
+  firstValueFrom,
+  share,
+  switchMap,
+} from "rxjs";
 
 interface FetchRequest {
   opportunity_id?: string;
@@ -31,7 +38,7 @@ interface SessionRequest {
   opportunity_id: string;
 }
 
-export class AuthService {
+export class OpportunityService {
   private readonly networkService = NetworkService.getInstance();
   private readonly fetchRequest$ = new Subject<FetchRequest>();
   private readonly fetchResponse$: Observable<object>;
@@ -48,13 +55,48 @@ export class AuthService {
   private readonly sessionRequest$ = new Subject<SessionRequest>();
   private readonly sessionResponse$: Observable<object>;
 
-  private static instance: AuthService;
-  private failedAttempts = 0;
+  private static instance: OpportunityService;
 
   private constructor() {
     this.fetchResponse$ = this.fetchRequest$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("opportunity/fetch.php", request)
+        this.networkService.fetch("opportunity/fetch.php", request).pipe(
+          switchMap(async (response) => {
+            if (response.success) {
+              if (response.opportunities) {
+                const mergedOpportunities = response.opportunity.map(
+                  async (opportunity: any) => {
+                    const activeViewerResponse = await firstValueFrom(
+                      this.networkService.fetch("session/count.php", {
+                        type: "opportunity",
+                        id: opportunity.opportunity_id,
+                      })
+                    );
+                    if (activeViewerResponse.success) {
+                      opportunity.activeViewers = activeViewerResponse.active;
+                    }
+                    return opportunity;
+                  }
+                );
+                response.opportunites = mergedOpportunities;
+              }
+
+              if (response.opportunity) {
+                const activeViewerResponse = await firstValueFrom(
+                  this.networkService.fetch("session/count.php", {
+                    type: "opportunity",
+                    id: response.opportunity.opportunity_id,
+                  })
+                );
+                if (activeViewerResponse.success) {
+                  response.opportunity.activeViewers =
+                    activeViewerResponse.active;
+                }
+              }
+            }
+            return of(response);
+          })
+        )
       ),
       share()
     );
@@ -93,12 +135,12 @@ export class AuthService {
     );
   }
 
-  public static getInstance(): AuthService {
-    if (!AuthService.instance) {
-      AuthService.instance = new AuthService();
+  public static getInstance(): OpportunityService {
+    if (!OpportunityService.instance) {
+      OpportunityService.instance = new OpportunityService();
     }
 
-    return AuthService.instance;
+    return OpportunityService.instance;
   }
 
   feedFetch(request: FetchRequest) {

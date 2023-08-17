@@ -25,3 +25,17 @@ export enum SessionView {
   PROFILE = "profile",
   OPPORTUNITY = "opportunity",
 }
+
+export enum UserProfileSectionType {
+  EDUCATION = "education",
+  EXPERIENCE = "experience",
+  VOLUNTEERING = "volunteering",
+}
+
+export interface UserProfileSection {
+  title: string;
+  location: string;
+  description: string;
+  startedAt: number;
+  endedAt: number | null;
+}
