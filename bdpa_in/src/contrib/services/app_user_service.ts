@@ -15,7 +15,7 @@ export class AppUserService {
     // Upon starting, log user in if applicable.
     const userStorage =
       LocalStorage.getItem("user") ?? SessionStorage.getItem("user");
-    const impersonationStorage = SessionStorage.getItem("impersonator");
+    const impersonationStorage = SessionStorage.getItem("impersonatingUser");
     if (userStorage) {
       this.user = userStorage as User;
     }
@@ -51,6 +51,10 @@ export class AppUserService {
 
   getImpersonatingUser() {
     return this.impersonatingUser;
+  }
+
+  isImpersonating() {
+    return !!this.impersonatingUser;
   }
 
   removeImpersonatingUser() {

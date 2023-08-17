@@ -52,7 +52,7 @@ class Navbar
   }
 
   get isImpersonating() {
-    return !!this.appUserService.getImpersonatingUser();
+    return this.appUserService.isImpersonating();
   }
 
   readonly logout = (event: MouseEvent) => {

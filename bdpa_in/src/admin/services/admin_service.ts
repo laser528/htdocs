@@ -1,6 +1,7 @@
 import { SessionView, UserType } from "../../contrib/lib";
 import { NetworkService } from "../../contrib/services/network_service";
-import { Subject, Observable, share, switchMap } from "rxjs";
+import { AppUserService } from "../../contrib/services/app_user_service";
+import { Subject, Observable, share, of, switchMap } from "rxjs";
 
 interface AddUserRequest {
   username: string;
@@ -32,6 +33,7 @@ interface SessionRequest {
 }
 
 export class AdminService {
+  private readonly appUserService = AppUserService.getInstance();
   private readonly networkService = NetworkService.getInstance();
   private readonly addUserRequest$ = new Subject<AddUserRequest>();
   private readonly addUserResponse$: Observable<object>;
@@ -71,7 +73,15 @@ export class AdminService {
 
     this.impersonateUserResponse$ = this.impersonateUserRequest$.pipe(
       switchMap((request) =>
-        this.networkService.fetch("admin/impersonate_user.php", request)
+        this.networkService.fetch("admin/impersonate_user.php", request).pipe(
+          switchMap((response) => {
+            if (response.success) {
+              this.appUserService.setImpersonatingUser(response.user);
+            }
+
+            return of(response);
+          })
+        )
       ),
       share()
     );

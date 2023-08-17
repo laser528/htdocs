@@ -1,0 +1,37 @@
+#admin_container {
+  background-color: white;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.admin_sidebar {
+  background: rgb(240, 240, 240);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.admin_content {
+  position: absolute;
+  top: 0;
+  left: 16%;
+  right: 0;
+  bottom: 0;
+}
+
+.admin_sidebar_links {
+  color: black;
+}
+
+.sites_info_card_title {
+  font-size: medium;
+}
+
+.sites_info_card_text {
+  font-size: x-large;
+}
